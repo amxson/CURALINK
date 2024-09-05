@@ -73,12 +73,12 @@ const login = async (req, res) => {
   }
 };
 
-// Register a new user
 const register = async (req, res) => {
   try {
     const { email, password, firstname, lastname, role, pic } = req.body;
     console.log("Attempting registration with email:", email); // Debugging line
 
+    // Validate input fields
     if (!email || !password || !firstname || !lastname || !role) {
       console.error("Registration error: Missing fields"); // Debugging line
       return res.status(400).send("All fields are required");
@@ -88,7 +88,7 @@ const register = async (req, res) => {
     const emailPresent = await User.findOne({ email });
     if (emailPresent) {
       console.error("Email already exists"); // Debugging line
-      return res.status(400).send("Email already exists");
+      return res.status(409).send("Email already exists"); // Use 409 Conflict
     }
 
     // Hash password
