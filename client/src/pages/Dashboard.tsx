@@ -9,7 +9,9 @@ import Aprofile from "../components/Aprofile";
 
 // Define the type for props
 interface DashboardProps {
-  type: "home" | "users" | "doctors" | "applications" | "appointments" | "aprofile"|"contactMessages";
+
+  type: "home" | "users" | "doctors" | "applications" | "appointments" | "aprofile" | "contactMessages";
+
 }
 
 const Dashboard: React.FC<DashboardProps> = (props) => {

@@ -1,5 +1,5 @@
 {
-  "name": "DoctorAppointment",
+  "name": "curalink",
   "version": "2.0.0",
   "description": "Doctor appointment website",
   "main": "server.js",
