@@ -2,7 +2,7 @@
 
 .notif-section {
   height: 70vh;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .disable-btn {
