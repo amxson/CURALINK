@@ -36,3 +36,23 @@
   gap: 2rem;
   justify-content: space-between;
 }
+
+@media screen and (max-width: 770px) {
+  .hero {
+    height: auto;
+  }
+  .hero,
+  .about {
+    flex-direction: column;
+  }
+  .hero-content {
+    margin-top: 2rem;
+    align-items: center;
+  }
+  .hero-content h1 {
+    text-align: center;
+  }
+  .about-heading {
+    margin-top: 4rem;
+  }
+}
