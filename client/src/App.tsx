@@ -37,9 +37,9 @@ const App: React.FC = () => {
           <Route
             path="/register"
             element={
-              <Protected>
+             
                 <Register />
-              </Protected>
+             
             }
           />
           <Route path="/" element={<Home />} />
