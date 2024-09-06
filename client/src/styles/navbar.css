@@ -23,6 +23,11 @@ nav {
   align-items: center;
 }
 
+.nav-logo a,
+.nav-links a {
+  color: var(--bold-text-color);
+}
+
 .nav-links {
   display: flex;
   gap: 2rem;
