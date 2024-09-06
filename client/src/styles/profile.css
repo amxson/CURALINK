@@ -26,4 +26,35 @@
   padding: 0.5rem 0.8rem;
 }
 
+@media (max-width: 1230px) {
+  .profile-container {
+    width: 50%;
+  }
+}
 
+@media (max-width: 828px) {
+  .profile-container {
+    width: 60%;
+  }
+}
+
+@media (max-width: 655px) {
+  .profile-container {
+    width: 70%;
+  }
+  .profile-pic {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 493px) {
+  .profile-container {
+    width: 70%;
+  }
+
+  .form-same-row {
+    flex-direction: column;
+  }
+}
