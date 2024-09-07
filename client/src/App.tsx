@@ -96,7 +96,7 @@ const App: React.FC = () => {
             path="/dashboard/users"
             element={
               <Admin>
-                <Dashboard type={"users"} />
+                <Dashboard type={"patients"} />
               </Admin>
             }
           />

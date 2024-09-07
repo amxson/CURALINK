@@ -24,8 +24,8 @@ const Sidebar: React.FC = () => {
       icon: <FaHome />,
     },
     {
-      name: "Users",
-      path: "/dashboard/users",
+      name: "Patients", // Updated name
+      path: "/dashboard/users", // Updated path
       icon: <FaUsers />,
     },
     {
@@ -50,8 +50,8 @@ const Sidebar: React.FC = () => {
     },
     {
       name: "Contact Messages",
-      path: "/dashboard/contactMessages", // Add this line
-      icon: <FaEnvelope />, // You can use the same icon or a different one
+      path: "/dashboard/contactMessages",
+      icon: <FaEnvelope />,
     },
   ];
 

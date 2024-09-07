@@ -1,38 +1,41 @@
-@import url(app.css);
-
 footer {
-  background-color: var(--light-text-color);
+  background-color: #cfe1f3; /* A slightly darker shade than the light blue */
+  padding: 1rem 0; /* Reduced height */
 }
 
-.footer {
+.footer-content {
   display: flex;
-  width: 50%;
-  align-items: flex-start;
   justify-content: space-between;
-  height: 100%;
-  margin: auto;
-  padding: 2rem 0;
+  align-items: center;
+  padding: 0 2rem; /* Padding for spacing */
 }
 
-.footer h3 {
-  color: var(--light-blue);
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-}
-
-.footer a {
-  color: var(--light-blue);
-}
-
-.footer-links ul {
+.footer-info {
+  color: var(--light-text-color);
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  align-items: center;
+}
+
+.footer-info p {
+  margin: 0;
+}
+
+.footer-info p {
+  font-weight: 600;
+  color: var(--bold-text-color);
+}
+
+.social {
+  display: flex;
+  align-items: center;
 }
 
 .social ul {
   display: flex;
   gap: 1rem;
+  padding: 0;
+  list-style: none;
+  margin: 0;
 }
 
 .social li {
@@ -48,6 +51,11 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: blue; /* Blue color for icons */
+}
+
+.social a:hover {
+  font-weight: bold; /* Bold effect on hover */
 }
 
 .social svg {
@@ -71,22 +79,4 @@ footer {
 
 .youtube {
   background-color: #ff0000;
-}
-
-.footer-bottom {
-  text-align: center;
-  background-color: var(--bold-text-color);
-  color: var(--light-blue);
-  padding: 0.3rem 0;
-}
-
-.footer-bottom a {
-  color: var(--dark-blue);
-}
-
-@media screen and (max-width: 550px) {
-  .social ul {
-    flex-direction: column;
-    align-items: center;
-  }
 }

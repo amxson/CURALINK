@@ -3,13 +3,13 @@ import AdminApplications from "../components/AdminApplications";
 import AdminAppointments from "../components/AdminAppointments";
 import AdminDoctors from "../components/AdminDoctors";
 import Sidebar from "../components/Sidebar";
-import Users from "../components/Users";
+import Patients from "../components/Patients"; // Updated import
 import Home from "../components/Home";
 import Aprofile from "../components/Aprofile";
 import ContactMessages from "../components/ContactMessages"; // Import the new component
 
 interface DashboardProps {
-  type: "home" | "users" | "doctors" | "applications" | "appointments" | "aprofile" | "contactMessages";
+  type: "home" | "patients" | "doctors" | "applications" | "appointments" | "aprofile" | "contactMessages";
 }
 
 const Dashboard: React.FC<DashboardProps> = (props) => {
@@ -23,8 +23,8 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
           {
             type === "home" ? (
               <Home />
-            ) : type === "users" ? (
-              <Users />
+            ) : type === "patients" ? ( // Updated condition
+              <Patients />
             ) : type === "doctors" ? (
               <AdminDoctors />
             ) : type === "applications" ? (
