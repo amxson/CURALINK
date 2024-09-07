@@ -5,27 +5,37 @@ footer {
 
 .footer-content {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  padding: 0 2rem; /* Padding for spacing */
+}
+
+.footer-info {
+  color: var(--light-text-color);
+  display: flex;
+  align-items: center;
+}
+
+.footer-info p {
+  margin: 0;
+}
+
+.footer-info p {
+  font-weight: 600;
+  color: var(--bold-text-color);
 }
 
 .social {
-  margin-bottom: 1rem;
-}
-
-.social h3 {
-  color: var(--darker-blue);
-  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .social ul {
   display: flex;
-  justify-content: center;
   gap: 1rem;
   padding: 0;
   list-style: none;
+  margin: 0;
 }
 
 .social li {
@@ -41,6 +51,11 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: blue; /* Blue color for icons */
+}
+
+.social a:hover {
+  font-weight: bold; /* Bold effect on hover */
 }
 
 .social svg {
@@ -64,21 +79,4 @@ footer {
 
 .youtube {
   background-color: #ff0000;
-}
-
-.footer-info {
-  color: var(--light-text-color);
-}
-
-.footer-info p {
-  margin: 0.5rem 0;
-}
-
-.footer-info p:first-of-type {
-  font-weight: bold;
-}
-
-.footer-info p:last-of-type {
-  font-weight: 600;
-  color: var(--bold-text-color);
 }
