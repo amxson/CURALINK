@@ -1,38 +1,31 @@
-@import url(app.css);
-
 footer {
-  background-color: var(--light-text-color);
+  background-color: #cfe1f3; /* A slightly darker shade than the light blue */
+  padding: 1rem 0; /* Reduced height */
 }
 
-.footer {
-  display: flex;
-  width: 50%;
-  align-items: flex-start;
-  justify-content: space-between;
-  height: 100%;
-  margin: auto;
-  padding: 2rem 0;
-}
-
-.footer h3 {
-  color: var(--light-blue);
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-}
-
-.footer a {
-  color: var(--light-blue);
-}
-
-.footer-links ul {
+.footer-content {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.social {
+  margin-bottom: 1rem;
+}
+
+.social h3 {
+  color: var(--darker-blue);
+  margin-bottom: 0.5rem;
 }
 
 .social ul {
   display: flex;
+  justify-content: center;
   gap: 1rem;
+  padding: 0;
+  list-style: none;
 }
 
 .social li {
@@ -73,20 +66,19 @@ footer {
   background-color: #ff0000;
 }
 
-.footer-bottom {
-  text-align: center;
-  background-color: var(--bold-text-color);
-  color: var(--light-blue);
-  padding: 0.3rem 0;
+.footer-info {
+  color: var(--light-text-color);
 }
 
-.footer-bottom a {
-  color: var(--dark-blue);
+.footer-info p {
+  margin: 0.5rem 0;
 }
 
-@media screen and (max-width: 550px) {
-  .social ul {
-    flex-direction: column;
-    align-items: center;
-  }
+.footer-info p:first-of-type {
+  font-weight: bold;
+}
+
+.footer-info p:last-of-type {
+  font-weight: 600;
+  color: var(--bold-text-color);
 }

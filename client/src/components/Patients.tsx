@@ -18,18 +18,18 @@ interface User {
   mobile: string;
   age: number;
   gender: string;
-  isDoctor: boolean;
+  role: string; // Added role field
 }
 
-// Define the state and props types if needed
-const Users: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
+const Patients: React.FC = () => {
+  const [patients, setPatients] = useState<User[]>([]);
   const dispatch = useDispatch();
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const { loading } = useSelector((state: RootState) => state.root);
 
-  const getAllUsers = async () => {
+  // Fetch all patients
+  const getAllPatients = async () => {
     try {
       dispatch(setLoading(true));
       let url = "/api/user/getallusers";
@@ -39,11 +39,13 @@ const Users: React.FC = () => {
       if (searchTerm.trim() !== "") {
         url += `${filter !== "all" ? "&" : "?"}search=${searchTerm}`;
       }
-      const temp: User[] = await fetchData(url);
-      setUsers(temp);
+      const allUsers: User[] = await fetchData(url);
+      // Filter patients based on their role
+      const patientsOnly = allUsers.filter(user => user.role === "Patient");
+      setPatients(patientsOnly);
       dispatch(setLoading(false));
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching patients:", error);
       dispatch(setLoading(false));
     }
   };
@@ -60,12 +62,12 @@ const Users: React.FC = () => {
             data: { userId },
           }),
           {
-            loading: "Deleting user...", // Added missing 'loading' property
+            loading: "Deleting user...",
             success: "User deleted successfully",
             error: "Unable to delete user",
           }
         );
-        getAllUsers();
+        getAllPatients();
       }
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -73,14 +75,15 @@ const Users: React.FC = () => {
   };
 
   useEffect(() => {
-    getAllUsers();
-  }, [filter, searchTerm]); // Add dependencies here
+    getAllPatients();
+  }, [filter, searchTerm]);
 
-  const filteredUsers = users.filter((doc) => {
+  // Filter patients based on the filter and search term
+  const filteredPatients = patients.filter((patient) => {
     if (filter === "all") {
       return true;
     } else if (filter === "firstname") {
-      return doc.firstname.toLowerCase().includes(searchTerm.toLowerCase());
+      return patient.firstname.toLowerCase().includes(searchTerm.toLowerCase());
     } else {
       return true;
     }
@@ -117,8 +120,8 @@ const Users: React.FC = () => {
               />
             </div>
           </div>
-          <h3 className="home-sub-heading">All Users</h3>
-          {users.length > 0 ? (
+          <h3 className="home-sub-heading">Patients</h3>
+          {patients.length > 0 ? (
             <div className="user-container">
               <table>
                 <thead>
@@ -131,12 +134,11 @@ const Users: React.FC = () => {
                     <th>Mobile No.</th>
                     <th>Age</th>
                     <th>Gender</th>
-                    <th>Is Doctor</th>
                     <th>Remove</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map((ele, i) => (
+                  {filteredPatients.map((ele, i) => (
                     <tr key={ele._id}>
                       <td>{i + 1}</td>
                       <td>
@@ -152,7 +154,6 @@ const Users: React.FC = () => {
                       <td>{ele.mobile}</td>
                       <td>{ele.age}</td>
                       <td>{ele.gender}</td>
-                      <td>{ele.isDoctor ? "Yes" : "No"}</td>
                       <td className="select">
                         <button
                           className="btn user-btn"
@@ -167,7 +168,7 @@ const Users: React.FC = () => {
               </table>
             </div>
           ) : (
-            <Empty message="No appointments found." />
+            <Empty message="No patients found." />
           )}
         </section>
       )}
@@ -175,4 +176,4 @@ const Users: React.FC = () => {
   );
 };
 
-export default Users;
+export default Patients;
