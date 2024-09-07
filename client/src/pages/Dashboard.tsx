@@ -6,12 +6,10 @@ import Sidebar from "../components/Sidebar";
 import Users from "../components/Users";
 import Home from "../components/Home";
 import Aprofile from "../components/Aprofile";
+import ContactMessages from "../components/ContactMessages"; // Import the new component
 
-// Define the type for props
 interface DashboardProps {
-
   type: "home" | "users" | "doctors" | "applications" | "appointments" | "aprofile" | "contactMessages";
-
 }
 
 const Dashboard: React.FC<DashboardProps> = (props) => {
@@ -35,6 +33,8 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
               <AdminAppointments />
             ) : type === "aprofile" ? (
               <Aprofile />
+            ) : type === "contactMessages" ? (
+              <ContactMessages />
             ) : (
               <></>
             )
