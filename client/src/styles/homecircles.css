@@ -1,8 +1,22 @@
 @import url(app.css);
 
+.circles-section {
+  text-align: center;
+  padding: 1rem;
+  
+}
+
+.circles-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--darker-blue); /* Adjust as needed */
+  margin-bottom: 1rem; /* Reduced space between title and circles */
+}
+
 .circles {
+  display: flex;
   flex-direction: row;
-  margin-top: 10rem;
+  margin-top: 8rem;
   justify-content: space-evenly;
   align-items: center;
 }

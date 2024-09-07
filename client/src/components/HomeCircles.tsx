@@ -45,66 +45,69 @@ const HomeCircles: React.FC = () => {
   }, []);
 
   return (
-    <section className="container circles">
-      <div className="circle">
-        <CountUp
-          start={0}
-          end={totalCount}
-          delay={0}
-          enableScrollSpy={true}
-          scrollSpyDelay={500}
-        >
-          {({ countUpRef }) => (
-            <div className="counter">
-              <span ref={countUpRef} />+
-            </div>
-          )}
-        </CountUp>
-        <span className="circle-name">
-          Total
-          <br />
-          Appointments
-        </span>
-      </div>
-      <div className="circle">
-        <CountUp
-          start={0}
-          end={completedCount}
-          delay={0}
-          enableScrollSpy={true}
-          scrollSpyDelay={500}
-        >
-          {({ countUpRef }) => (
-            <div className="counter">
-              <span ref={countUpRef} />+
-            </div>
-          )}
-        </CountUp>
-        <span className="circle-name">
-          Satisfied
-          <br />
-          Patients
-        </span>
-      </div>
-      <div className="circle">
-        <CountUp
-          start={0}
-          end={doctorCount}
-          delay={0}
-          enableScrollSpy={true}
-          scrollSpyDelay={500}
-        >
-          {({ countUpRef }) => (
-            <div className="counter">
-              <span ref={countUpRef} />+
-            </div>
-          )}
-        </CountUp>
-        <span className="circle-name">
-          Verified
-          <br />
-          Doctors
-        </span>
+    <section className="circles-section">
+      <h2 className="circles-title">Our Key Metrics</h2>
+      <div className="circles">
+        <div className="circle">
+          <CountUp
+            start={0}
+            end={totalCount}
+            delay={0}
+            enableScrollSpy={true}
+            scrollSpyDelay={500}
+          >
+            {({ countUpRef }) => (
+              <div className="counter">
+                <span ref={countUpRef} />+
+              </div>
+            )}
+          </CountUp>
+          <span className="circle-name">
+            Total
+            <br />
+            Appointments
+          </span>
+        </div>
+        <div className="circle">
+          <CountUp
+            start={0}
+            end={completedCount}
+            delay={0}
+            enableScrollSpy={true}
+            scrollSpyDelay={500}
+          >
+            {({ countUpRef }) => (
+              <div className="counter">
+                <span ref={countUpRef} />+
+              </div>
+            )}
+          </CountUp>
+          <span className="circle-name">
+            Satisfied
+            <br />
+            Patients
+          </span>
+        </div>
+        <div className="circle">
+          <CountUp
+            start={0}
+            end={doctorCount}
+            delay={0}
+            enableScrollSpy={true}
+            scrollSpyDelay={500}
+          >
+            {({ countUpRef }) => (
+              <div className="counter">
+                <span ref={countUpRef} />+
+              </div>
+            )}
+          </CountUp>
+          <span className="circle-name">
+            Verified
+            <br />
+            Doctors
+          </span>
+        </div>
       </div>
     </section>
   );
