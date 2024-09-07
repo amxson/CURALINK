@@ -105,30 +105,35 @@ const Navbar: React.FC = () => {
                 </NavLink>
               </li>
             </>
-          ) : (
-            <li className="profile-menu" onClick={() => setDropdownOpen(!dropdownOpen)}>
-              <div className="profile-header">
-                {user && <img src={user.pic} alt="profile" className="profile-pic1" />}
-                <span>{user?.firstname}</span>
-                <BsChevronDown className="dropdown-icon" /> {/* Dropdown icon */}
-              </div>
-              {dropdownOpen && (
-                <ul className="dropdown-menu">
-                  <li>
-                    <NavLink to="/profile">Profile</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/ChangePassword">Change Password</NavLink>
-                  </li>
-                  <li>
-                    <span onClick={logoutFunc}>Logout</span> {/* Added logout handler */}
-                  </li>
-                </ul>
-              )}
-            </li>
-          )}
+          ) : null}
         </ul>
+
+        {/* Profile menu next to the hamburger icon */}
+        {token && (
+          <div className="profile-menu" onClick={() => setDropdownOpen(!dropdownOpen)}>
+            <div className="profile-header">
+              {user && <img src={user.pic} alt="profile" className="profile-pic1" />}
+              <span>{user?.firstname}</span>
+              <BsChevronDown className="dropdown-icon" /> {/* Dropdown icon */}
+            </div>
+            {dropdownOpen && (
+              <ul className="dropdown-menu">
+                <li>
+                  <NavLink to="/profile">Profile</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/ChangePassword">Change Password</NavLink>
+                </li>
+                <li>
+                  <span onClick={logoutFunc}>Logout</span>
+                </li>
+              </ul>
+            )}
+          </div>
+        )}
+
       </nav>
+
       <div className="menu-icons">
         {!iconActive && (
           <FiMenu

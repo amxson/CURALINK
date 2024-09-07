@@ -191,3 +191,11 @@ nav {
 .dropdown-menu span:hover::after {
   width: 100%;
 }
+
+/* Apply profile-header padding and margin for smaller screens where hamburger shows */
+@media (max-width: 950px) {
+  .profile-header {
+    padding: 56px;
+    margin-bottom: 2px;
+  }
+}
