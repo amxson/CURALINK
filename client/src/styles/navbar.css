@@ -45,7 +45,7 @@ nav {
 .nav-links a:hover::after {
   content: '';
   position: absolute;
-  width: 100%;
+  width: 0;
   height: 2px;
   background-color: blue; /* Underline color */
   left: 0;
@@ -53,10 +53,15 @@ nav {
   transition: width 0.3s;
 }
 
+.nav-links a:hover::after {
+  width: 100%;
+}
+
 .nav-links .btn {
   color: var(--white);
   font-size: 0.8rem;
   padding: 0.4rem 0.8rem;
+  cursor: pointer; /* Adds pointer cursor */
 }
 
 .menu-icons {
@@ -94,4 +99,95 @@ nav {
     top: 33%;
     right: 7%;
   }
+}
+
+/* Profile Menu Dropdown */
+.profile-menu {
+  position: relative;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-pic1 {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.profile-header span {
+  font-size: 0.9rem;
+  color: var(--bold-text-color);
+  position: relative;
+}
+
+.profile-header .dropdown-icon {
+  margin-left: 5px;
+  font-size: 0.9rem;
+  color: var(--bold-text-color);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--light-blue);
+  border: 1px solid var(--bold-text-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  z-index: 30;
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu a,
+.dropdown-menu span {
+  display: block;
+  padding: 10px;
+  color: var(--bold-text-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu span:hover {
+  background-color: var(--darker-blue);
+  color: var(--white);
+}
+
+.profile-menu:hover .dropdown-menu {
+  display: block;
+}
+
+/* Hover underline animation */
+.nav-links a:hover::after {
+  width: 100%;
+  transition: width 0.3s;
+}
+
+/* Profile Dropdown Hover Animation */
+.dropdown-menu a:hover::after,
+.dropdown-menu span:hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--darker-blue);
+  transition: width 0.3s ease;
+}
+
+.dropdown-menu a:hover::after,
+.dropdown-menu span:hover::after {
+  width: 100%;
 }
