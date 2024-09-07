@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
     <header>
       <nav className={iconActive ? "nav-active" : ""}>
         <h2 className="nav-logo">
-          <NavLink to={"/"}>Doctor's Appointment</NavLink>
+          <NavLink to={"/"}>CuraLink</NavLink>
         </h2>
         <ul className="nav-links">
           <li>
@@ -51,6 +51,7 @@ const Navbar: React.FC = () => {
           {user && user.role === "Doctor" && (
             <>
               <li>
+                
                 <NavLink to={"/applyfordoctor"}>Apply for doctor</NavLink>
               </li>
               <li>
