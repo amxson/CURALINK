@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Team Red",
+  "author": "Amar Asfaw",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
