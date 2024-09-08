@@ -11,44 +11,36 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import {
-  FaUserMd,
-  FaUsers,
-} from "react-icons/fa";
+import { FaUserMd } from "react-icons/fa";
+import { MdSick } from "react-icons/md"; // Importing a patient-related icon
 import Loading from "./Loading";
 import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import fetchData from "../helper/apiCall";
 import axios from "axios";
 import "../styles/Home.css";
-import {
-  BsFillGrid3X3GapFill,
-} from "react-icons/bs";
+import { BsFillGrid3X3GapFill } from "react-icons/bs";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
-// Define the types for the data structures
 interface User {
   id: string;
   name: string;
-  // Add other user fields as needed
+  role: string;
 }
 
 interface Appointment {
   id: string;
   doctorId: string;
   userId: string;
-  // Add other appointment fields as needed
 }
 
 interface Doctor {
   id: string;
   name: string;
   specialty: string;
-  // Add other doctor fields as needed
 }
 
-// Type for the Redux state
 interface RootState {
   root: {
     loading: boolean;
@@ -56,24 +48,25 @@ interface RootState {
 }
 
 const Home: React.FC = () => {
-  const [userCount, setUserCount] = useState<number>(0);
+  const [patientCount, setPatientCount] = useState<number>(0);
   const [appointmentCount, setAppointmentCount] = useState<number>(0);
   const [doctorCount, setDoctorCount] = useState<number>(0);
   const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.root);
 
-  // Memoize the fetchDataCounts function
   const fetchDataCounts = useCallback(async () => {
     try {
       dispatch(setLoading(true));
 
       const userData = (await fetchData("/api/user/getallusers")) as User[];
+      const patients = userData.filter((user) => user.role === "Patient");
+
       const appointmentData = (await fetchData(
         "/api/appointment/getallappointments"
       )) as Appointment[];
       const doctorData = (await fetchData("api/doctor/getalldoctors")) as Doctor[];
 
-      setUserCount(userData.length);
+      setPatientCount(patients.length);
       setAppointmentCount(appointmentData.length);
       setDoctorCount(doctorData.length);
 
@@ -86,11 +79,10 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchDataCounts();
-  }, [fetchDataCounts]); // Now `fetchDataCounts` is a stable dependency
+  }, [fetchDataCounts]);
 
-  // Typing the data for the charts
   const data = [
-    { name: "User Count", count: userCount },
+    { name: "Patient Count", count: patientCount },
     { name: "Appointment Count", count: appointmentCount },
     { name: "Doctor Count", count: doctorCount },
   ];
@@ -106,10 +98,10 @@ const Home: React.FC = () => {
             <div className="main-cards">
               <div className="card">
                 <div className="card-inner">
-                  <h3 style={{ color: "white" }}>USERS</h3>
-                  <FaUsers />
+                  <h3 style={{ color: "white" }}>PATIENTS</h3>
+                  <MdSick /> {/* Replaced with patient icon */}
                 </div>
-                <h2 style={{ color: "white" }}>{userCount}</h2>
+                <h2 style={{ color: "white" }}>{patientCount}</h2>
               </div>
               <div className="card">
                 <div className="card-inner">
