@@ -1,0 +1,110 @@
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+h2.chatbot-title {
+    color: #fff;
+}
+
+
+/* Chatbot Title */
+.chatbot-header h2 {
+    margin: 0;
+    text-align: center;
+    flex: 1; /* This ensures the title is centered */
+}
+
+/* Modal Content */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    height: 80vh;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-out;
+}
+
+
+.close-button:hover {
+    color: #ff0000;
+}
+
+/* Messages */
+.messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    max-height: calc(100% - 100px); /* Adjust based on header and input form height */
+}
+
+/* User and Bot Messages */
+.message {
+    margin-bottom: 12px; /* Spacing between messages */
+    padding: 12px; /* Padding inside messages */
+    border-radius: 8px; /* Rounded corners */
+    max-width: 80%; /* Limit message width */
+    word-wrap: break-word; /* Ensure long words break correctly */
+}
+
+.message.user {
+    background: #d1e7dd;
+    align-self: flex-end; /* Align user messages to the right */
+    text-align: right; /* Align text to the right */
+}
+
+.message.bot {
+    background: #f1f1f1;
+    align-self: flex-start; /* Align bot messages to the left */
+    text-align: left; /* Align text to the left */
+}
+/* Input Form */
+.input-form {
+    display: flex;
+    align-items: center;
+}
+
+.input-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+.input-form button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    background-color: #1e375a;
+    color: white;
+    cursor: pointer;
+}
+
+.input-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+

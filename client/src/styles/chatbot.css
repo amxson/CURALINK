@@ -1,0 +1,181 @@
+/* Style for the chatbot container */
+/* chatbot.css */
+
+.chatbot {
+    position: fixed;
+    top: 70px; /* Adjust this value to add space from the top of the viewport */
+    right: 0;
+    height: calc(100% - 70px); /* Adjust height to ensure it fits within the viewport */
+    width: 350px; /* Adjust width as needed */
+    background-color: #f9f9f9;
+    border-radius: 12px 0 0 12px; /* Rounded corners on the left side */
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%); /* Initially hidden */
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease-out;
+}
+/* Close Button */
+.close-button {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s ease;
+    position: absolute;
+    left: 10px; /* Adjust distance from the left */
+}
+
+.close-button:hover {
+    color: #ff0000;
+}
+.chatbot.open {
+    transform: scale(1);
+}
+
+.chatbot-header {
+    background: #1e375a;
+    color: #fff;
+    padding: 15px; /* Increased padding */
+    text-align: center;
+    font-size: 18px; /* Larger font size */
+    font-weight: bold;
+    border-bottom: 1px solid #0056b3; /* Slightly darker border */
+}
+
+.messages {
+    display: flex;
+    flex: 1 1;
+    padding: 15px;
+    overflow-y: auto;
+    max-height: calc(100% - 100px);
+    flex-direction: column;
+}
+
+.message {
+    margin-bottom: 12px; /* Increased margin */
+    padding: 12px; /* Increased padding */
+    border-radius: 8px; /* Rounded corners */
+    max-width: 80%; /* Limit message width */
+}
+
+.message.user {
+    background: #d1e7dd;
+    align-self: flex-end; /* Align user messages to the right */
+    text-align: right; /* Align text to the right */
+}
+
+.message.bot {
+    background: #f1f1f1;
+    align-self: flex-start; /* Align bot messages to the left */
+    text-align: left; /* Align text to the left */
+}
+
+.input-form {
+    display: flex;
+    border-top: 1px solid #ddd;
+    background: #f9f9f9;
+    padding: 15px; /* Increased padding */
+}
+
+.input-form input {
+    flex: 1;
+    padding: 12px; /* Increased padding */
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Rounded corners */
+    margin-right: 12px; /* Increased margin */
+    font-size: 16px; /* Larger font size */
+}
+
+.input-form button {
+    padding: 12px 16px; /* Increased padding */
+    border: none;
+    background: #1e375a;
+    color: #fff;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 16px; /* Larger font size */
+}
+
+
+/* Input Field Styling */
+.input-form input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+}
+
+/* Send Button Styling */
+.input-form button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #1e375a;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+.input-form button:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Chatbot Button */
+.chatbot-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #1e375a;
+        color: white;
+        padding: 0.45em;
+        border: none;
+        border-radius: 50%;
+        font-size: 40px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+}
+
+.chatbot-button:hover {
+    background-color: #0056b3;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .chatbot {
+        width: 100%;
+        height: calc(100% - 70px); /* Adjust height for smaller screens */
+        border-radius: 0;
+    }
+}
+
+.clear-context-button {
+    background-color: #ff4d4d; /* Red color for visibility */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 16px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .clear-context-button:hover {
+    background-color: #e60000;
+  }
+  
