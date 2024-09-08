@@ -8,10 +8,13 @@ const AboutUs: React.FC = () => {
         <h2 className="page-heading about-heading">About Us</h2>
         <div className="about">
           <div className="hero-img">
-            <img
-              src={image}
-              alt="hero"
-            />
+          <div className="hero-img">
+              <img
+                src={image}
+                alt="Image of a healthcare professional providing service or consultation"
+              />
+          </div>
+
           </div>
           <div className="hero-content">
             <p>

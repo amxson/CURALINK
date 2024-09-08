@@ -162,11 +162,13 @@ const AdminDoctors: React.FC = () => {
                     <tr key={ele._id}>
                       <td>{i + 1}</td>
                       <td>
-                        <img
+                      <img
                           className="user-table-pic"
                           src={ele.userId.pic}
-                          alt={ele.userId.firstname}
+                          alt={`Profile picture of ${ele.userId.firstname}, a registered user`}
+                          // Describes it as a profile picture of the user
                         />
+
                       </td>
                       <td>{ele.userId.firstname}</td>
                       <td>{ele.userId.lastname}</td>

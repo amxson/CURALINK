@@ -164,9 +164,10 @@ function Aprofile() {
             <h2 className="form-heading">Profile</h2>
             <img
               src={file}
-              alt="profile"
+              alt="Profile picture of the user"
               className="profile-pic"
             />
+
             <form
               onSubmit={formSubmit}
               className="register-form"
