@@ -142,11 +142,12 @@ const Patients: React.FC = () => {
                     <tr key={ele._id}>
                       <td>{i + 1}</td>
                       <td>
-                        <img
-                          className="user-table-pic"
-                          src={ele.pic}
-                          alt={ele.firstname}
-                        />
+                      <img
+                        className="user-table-pic"
+                        src={ele.pic}
+                        alt={`Profile picture of ${ele.firstname}, a registered user`}
+                      />
+
                       </td>
                       <td>{ele.firstname}</td>
                       <td>{ele.lastname}</td>

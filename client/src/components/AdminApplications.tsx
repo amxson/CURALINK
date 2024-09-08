@@ -134,14 +134,16 @@ const AdminApplications: React.FC = () => {
                     <tr key={ele._id}>
                       <td>{i + 1}</td>
                       <td>
-                        <img
+                      <img
                           className="user-table-pic"
                           src={
                             ele.userId.pic ||
                             "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
                           }
-                          alt={ele.userId.firstname}
+                          alt={`Profile picture of ${ele.userId.firstname} ${ele.userId.lastname || ''}`}
+                          // Includes the last name if available, otherwise just the first name
                         />
+
                       </td>
                       <td>{ele.userId.firstname}</td>
                       <td>{ele.userId.lastname}</td>

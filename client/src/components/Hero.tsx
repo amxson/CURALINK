@@ -15,11 +15,12 @@ const Hero: React.FC = () => {
         </p>
       </div>
       <div className="hero-img">
-        <img
-          src={image}
-          alt="hero"
-        />
-      </div>
+          <img
+            src={image}
+            alt="Hero image showcasing a key aspect of the website or service"
+          />
+        </div>
+
     </section>
   );
 };

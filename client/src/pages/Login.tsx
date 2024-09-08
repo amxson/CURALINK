@@ -129,7 +129,7 @@ function Login() {
               <option value="Patient">Patient</option>
             </select>
             <button type="submit" className="btn form-btn">
-              Sign In
+              Log In
             </button>
           </form>
           <NavLink className="login-link" to="/forgotpassword">

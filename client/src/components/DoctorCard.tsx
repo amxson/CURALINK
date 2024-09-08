@@ -36,13 +36,14 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ ele }) => {
   return (
     <div className={`card`}>
       <div className={`card-img flex-center`}>
-        <img
+      <img
           src={
             ele.userId.pic ||
             "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
           }
-          alt="profile"
+          alt={`Profile picture of ${ele.userId.firstname || 'anonymous user'}`}
         />
+
       </div>
       <h3 className="card-name">
         Dr. {ele.userId.firstname + " " + ele.userId.lastname}
