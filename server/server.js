@@ -14,7 +14,6 @@ const notificationRouter = require("./routes/notificationRouter");
 
 const app = express();
 const port = process.env.PORT || 5000;
-const GEMINI_API_KEY = "AIzaSyBIXjokE8SCGdOXWy1DDavWFNdg8SyUtlg";
 
 // Middleware
 app.use(cors());
@@ -91,7 +90,7 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
       payload,
       {
         headers: {
