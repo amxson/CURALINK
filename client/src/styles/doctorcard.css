@@ -160,3 +160,30 @@ footer {
     padding: 1rem; /* Adjust padding inside cards for small screens */
   }
 }
+
+@media (max-width: 400px) {
+  .doctor-card {
+    font-size: 0.8rem; /* Smaller font size for very small devices */
+    padding: 0.7rem; /* Adjust padding for very small screens */
+  }
+
+  .doctor-card-img img {
+    width: 50px; /* Smaller image size for very small screens */
+    height: 50px;
+  }
+
+  .doctor-card-name {
+    font-size: 1rem; /* Smaller font size for very small devices */
+  }
+
+  .doctor-card-specialization,
+  .doctor-card-experience,
+  .doctor-card-rating {
+    font-size: 0.8rem; /* Smaller font size for very small devices */
+  }
+
+  .doctor-card-btn {
+    font-size: 0.8rem; /* Smaller button font size for very small devices */
+    padding: 0.5rem 1rem; /* Adjust button padding */
+  }
+}

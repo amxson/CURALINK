@@ -19,3 +19,23 @@
   font-weight: 700;
   text-align: center; /* Center-align title */
 }
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .doctors-card-container {
+    gap: 1rem; /* Adjust gap for medium-sized screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .doctors-card-container {
+    gap: 0.5rem; /* Reduce gap for smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .doctors-card-container {
+    gap: 0.2rem; /* Further reduce gap for very small screens */
+    padding: 0.5rem; /* Adjust padding for small screens */
+  }
+}
