@@ -1,35 +1,162 @@
-@import url(app.css);
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
-.card {
+/* Ensure the body and html take full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Wrapper for content and footer */
+.wrapper {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  border-radius: 10px;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 0 10px 0 rgb(188, 188, 188);
+  min-height: 100vh; /* Full viewport height */
 }
 
-.card-img {
+/* Content takes up remaining space */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Footer */
+footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Doctor Card Container */
+.doctor-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: space-between;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem 0;
 }
 
-.card-img img {
+/* Doctor Card */
+.doctor-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: 350px;
+  border: 1px solid #00abe4;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+}
+
+.doctor-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.doctor-card-img {
+  flex-shrink: 0;
+  margin-right: 1.5rem;
+}
+
+.doctor-card-img img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  border: 2px solid #00abe4;
 }
 
-.card-name {
-  margin: 0 auto;
-  font-size: 1.2rem;
+.doctor-card-info {
+  flex-grow: 1;
+  text-align: left;
 }
 
-.appointment-btn {
-  font-size: 0.8rem;
-  padding: 1rem;
-  margin: 1rem auto;
+.doctor-card-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
-.card p {
-  width: 100%;
+.doctor-card-specialization {
+  font-size: 0.9rem;
+  color: #1e375a;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card-experience {
+  font-size: 0.9rem;
+  color: #1e375a;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #1e375a;
+}
+
+.doctor-card-rating span {
+  display: flex;
+  align-items: center;
+}
+
+.doctor-card-btn {
+  background-color: #00abe4;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.doctor-card-btn:hover {
+  background-color: #0077ff;
+}
+
+/* Title Spacing */
+.our-doctors-title {
+  margin-bottom: 2rem; /* Adjust this value to match spacing with Appointment section */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .doctor-card {
+    max-width: calc(50% - 1rem); /* Adjust to 2 columns */
+  }
+}
+
+@media (max-width: 768px) {
+  .doctor-card {
+    max-width: 100%; /* Single column on smaller screens */
+    flex-direction: column; /* Stack image and info vertically */
+    align-items: flex-start; /* Align content to the start */
+  }
+
+  .doctor-card-img {
+    margin-right: 0;
+    margin-bottom: 1rem; /* Add spacing between image and info */
+  }
+
+  .doctor-card-img img {
+    width: 60px; /* Adjust image size for smaller screens */
+    height: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .doctor-card-container {
+    padding: 1rem 0; /* Adjust padding for small screens */
+  }
+
+  .doctor-card {
+    padding: 1rem; /* Adjust padding inside cards for small screens */
+  }
 }
