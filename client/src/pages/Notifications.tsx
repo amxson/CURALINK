@@ -61,44 +61,46 @@ const Notifications: React.FC = () => {
   );
 
   return (
-    <>
+    <div className="wrapper">
       <Navbar />
-      {loading ? (
-        <Loading />
-      ) : (
-        <section className="container notif-section">
-          <h2 className="page-heading">Your Notifications</h2>
-          {notifications.length > 0 ? (
-            <div className="notifications">
-              <table>
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Content</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedNotifications.map((ele, i) => (
-                    <tr key={ele._id}>
-                      <td>{(currentPage - 1) * notificationsPerPage + i + 1}</td>
-                      <td>{ele.content}</td>
-                      <td>{ele.updatedAt.split("T")[0]}</td>
-                      <td>{ele.updatedAt.split("T")[1].split(".")[0]}</td>
+      <div className="content">
+        {loading ? (
+          <Loading />
+        ) : (
+          <section className="container notif-section">
+            <h2 className="page-heading">Your Notifications</h2>
+            {notifications.length > 0 ? (
+              <div className="notifications">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>S.No</th>
+                      <th>Content</th>
+                      <th>Date</th>
+                      <th>Time</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="pagination">{renderPagination()}</div>
-            </div>
-          ) : (
-            <Empty message="No notifications available" />
-          )}
-        </section>
-      )}
+                  </thead>
+                  <tbody>
+                    {paginatedNotifications.map((ele, i) => (
+                      <tr key={ele._id}>
+                        <td>{(currentPage - 1) * notificationsPerPage + i + 1}</td>
+                        <td>{ele.content}</td>
+                        <td>{ele.updatedAt.split("T")[0]}</td>
+                        <td>{ele.updatedAt.split("T")[1].split(".")[0]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="pagination">{renderPagination()}</div>
+              </div>
+            ) : (
+              <Empty message="No notifications available" />
+            )}
+          </section>
+        )}
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

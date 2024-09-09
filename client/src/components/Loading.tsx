@@ -1,14 +1,17 @@
 // Loading.tsx
 import React from 'react';
-import "../styles/loading.css";
-
+import "../styles/loading.css"; // Ensure this path is correct
 
 const Loading: React.FC = () => {
   return (
     <div className="loading">
-      <div className="loader">Loading...</div>
+      <div className="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
-  )
+  );
 };
 
 export default Loading;

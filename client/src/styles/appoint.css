@@ -1,0 +1,214 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+/* General container styling */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the container takes full height */
+}
+
+/* Section styling */
+.notif-section {
+  flex: 1; /* Push footer to the bottom when content is short */
+  padding: 2rem 0;
+}
+
+/* Page heading styling */
+.page-heading {
+  font-size: 2.5rem;
+  color: var(--main-color);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Appointments container styling with 3-column grid layout */
+.appointments {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Appointment card styling */
+.appointment-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 2px solid #87CEEB; /* Light blue border */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.appointment-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Patient info styling */
+.patient-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Image styling: moved to the left of the patient name */
+.patient-card-img {
+  flex-shrink: 0;
+}
+
+.patient-card-img img {
+  width: 50px; /* Adjust the image size */
+  height: 50px; /* Adjust the image size */
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+}
+
+/* Patient details on the right side of the image */
+.patient-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.patient-card-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Status and button section */
+.status-complete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.status {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #6c757d;
+}
+
+.complete-btn {
+  background-color: #17a2b8;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.complete-btn:disabled {
+  background-color: #6c757d;
+}
+
+.complete-btn:not(:disabled):hover {
+  background-color: #138496;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .appointments {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .appointments {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Footer styling */
+footer {
+  background-color: #cfe1f3; /* A slightly darker shade than the light blue */
+  padding: 1rem 0; /* Reduced height */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem; /* Padding for spacing */
+}
+
+.footer-info {
+  color: var(--light-text-color);
+  display: flex;
+  align-items: center;
+}
+
+.footer-info p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--bold-text-color);
+}
+
+.social {
+  display: flex;
+  align-items: center;
+}
+
+.social ul {
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.social li {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: blue; /* Blue color for icons */
+}
+
+.social a:hover {
+  font-weight: bold; /* Bold effect on hover */
+}
+
+.social svg {
+  font-size: 1.3rem;
+}
+
+.facebook {
+  background-color: #3b5998;
+}
+
+.instagram {
+  background: linear-gradient(
+    180deg,
+    rgba(64, 93, 230, 1) 0%,
+    rgba(131, 58, 180, 1) 25%,
+    rgba(225, 48, 108, 1) 50%,
+    rgba(245, 96, 64, 1) 75%,
+    rgba(252, 175, 69, 1) 100%
+  );
+}
+
+.youtube {
+  background-color: #ff0000;
+}

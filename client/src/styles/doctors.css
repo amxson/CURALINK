@@ -1,4 +1,4 @@
-@import url(app.css);
+@import url("app.css");
 
 .doctors {
   margin-bottom: 5rem;
@@ -10,4 +10,32 @@
   justify-content: space-evenly;
   gap: 3rem;
   width: 100%;
+}
+
+/* Ensure the doctor section's title and container spacing */
+.page-heading {
+  margin-bottom: 2rem; /* Adjust this value to align with the spacing used in other sections */
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center; /* Center-align title */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .doctors-card-container {
+    gap: 1rem; /* Adjust gap for medium-sized screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .doctors-card-container {
+    gap: 0.5rem; /* Reduce gap for smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .doctors-card-container {
+    gap: 0.2rem; /* Further reduce gap for very small screens */
+    padding: 0.5rem; /* Adjust padding for small screens */
+  }
 }

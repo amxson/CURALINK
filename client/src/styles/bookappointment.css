@@ -1,15 +1,16 @@
 @import url(app.css);
 
+/* Modal Container */
 .modal {
   position: absolute;
-  top: 0%;
-  left: 0%;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 99vh;
-  /* background-color: rgba(0, 0, 0, 0.322); */
   z-index: 1;
 }
 
+/* Modal Content */
 .modal__content {
   display: flex;
   flex-direction: column;
@@ -17,30 +18,90 @@
   gap: 2rem;
   width: 30%;
   padding: 2rem;
-  border: 1px solid var(--light-blue);
+  border: 1px solid #00abe4; /* Light Blue */
   border-radius: 10px;
-  color: var(--light-blue);
-  background-color: rgb(30, 55, 90);
+  color: #00abe4; /* Light Blue */
+  background-color: #f4f7f9; /* Light background color */
   position: relative;
 }
 
+/* Modal Title */
 .modal__content h2 {
-  color: var(--light-blue);
+  color: #00abe4; /* Light Blue */
 }
 
-.modal__content .btn {
-  font-size: 0.9rem;
-}
-
+/* Close Button */
 .close-btn {
   position: absolute;
   top: 2%;
   right: 2%;
   font-size: 1.5rem;
-  color: var(--secondary-color);
+  color: #0077ff; /* Button hover color */
   cursor: pointer;
 }
 
+/* Booking Form Container */
 .book {
   width: 80%;
+}
+
+/* Form Inputs */
+.form-input {
+  border: 1px solid #00abe4; /* Light Blue */
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Submit Button */
+.btn.form-btn {
+  background-color: #00abe4; /* Light Blue */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn.form-btn:hover {
+  background-color: #0077ff; /* Darker Blue for hover effect */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .modal__content {
+    width: 40%; /* Adjust width for medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .modal__content {
+    width: 60%; /* Adjust width for smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .modal__content {
+    width: 90%; /* Adjust width for very small screens */
+    padding: 1rem; /* Adjust padding for small screens */
+  }
+
+  .close-btn {
+    top: 1%;
+    right: 1%;
+    font-size: 1.2rem; /* Adjust font size for small screens */
+  }
+
+  .form-input {
+    font-size: 0.8rem; /* Adjust font size for small screens */
+  }
+
+  .btn.form-btn {
+    font-size: 0.8rem; /* Adjust font size for small screens */
+    padding: 0.5rem 1rem; /* Adjust padding for small screens */
+  }
 }
