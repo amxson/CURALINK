@@ -17,6 +17,7 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<{ text: string; user: boolean }[]>([]);
   const [input, setInput] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const Chatbot: React.FC = () => {
     const userMessage = input;
     setMessages(prevMessages => [...prevMessages, { text: userMessage, user: true }]);
     setInput("");
+    setIsLoading(true); // Start loading animation
 
     try {
       // Step 1: Retrieve the initial bot response
@@ -69,15 +71,15 @@ const Chatbot: React.FC = () => {
       ${botResponse}
     `;
     
-
-
       const htmlResponse = await axios.post("/api/chat", { prompt: formatPrompt, clearContext: false });
       const formattedHtml = htmlResponse.data.message;
-      
+
       setMessages(prevMessages => [...prevMessages, { text: formattedHtml, user: false }]);
     } catch (error) {
       console.error("Error processing chatbot response:", error);
       setMessages(prevMessages => [...prevMessages, { text: "<div style='font-size: 16px; font-family: sans-serif;'>There was an error processing your request. Please try again later.</div>", user: false }]);
+    } finally {
+      setIsLoading(false); // Stop loading animation
     }
   };
 
@@ -119,6 +121,13 @@ const Chatbot: React.FC = () => {
               <div dangerouslySetInnerHTML={{ __html: msg.text }} />
             </div>
           ))}
+          {isLoading && (
+            <div className="loading-animation bot">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
         <form onSubmit={handleSubmit} className="input-form">
@@ -127,8 +136,9 @@ const Chatbot: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
+            disabled={isLoading} // Disable input while loading
           />
-          <button type="submit">Send</button>
+          <button type="submit" disabled={isLoading}>Send</button>
         </form>
       </div>
     </>
