@@ -180,10 +180,10 @@ const Register: React.FC = () => {
                 </select>
 
                 <div className="button-container">
-                  <button type="button" className="btn form-btn" onClick={previousPage}>
+                  <button type="button" className="prev-btn form-btn" onClick={previousPage}>
                     Previous
                   </button>
-                  <button type="submit" className="btn form-btn" disabled={loading}>
+                  <button type="submit" className="submit-btn form-btn" disabled={loading}>
                     Register
                   </button>
                 </div>

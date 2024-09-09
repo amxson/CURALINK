@@ -1,3 +1,4 @@
+/* Loading Container */
 .loading {
   display: flex;
   justify-content: center;
@@ -6,47 +7,39 @@
   height: 90vh;
 }
 
-.loader,
-.loader:after {
-  border-radius: 50%;
-  width: 4rem;
-  height: 4rem;
-}
-
+/* Bouncing Dots Loader */
 .loader {
-  margin: 60px auto;
-  font-size: 10px;
-  position: relative;
-  text-indent: -9999em;
-  border-top: 1em solid rgba(0, 47, 97, 0.2);
-  border-right: 1em solid rgba(0, 47, 97, 0.2);
-  border-bottom: 1em solid rgba(0, 47, 97, 0.2);
-  border-left: 1em solid #002f61;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation: load8 1.1s infinite linear;
-  animation: load8 1.1s infinite linear;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 6rem; /* Adjust size as needed */
 }
 
-@-webkit-keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+.loader div {
+  width: 1rem; /* Dot size */
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #002f61; /* Dot color */
+  animation: bounce 1.5s infinite ease-in-out;
 }
 
-@keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
+.loader div:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loader div:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.loader div:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
   }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
+  50% {
+    transform: translateY(-1.5rem); /* Adjust bounce height as needed */
   }
 }

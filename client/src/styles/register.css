@@ -1,4 +1,4 @@
-@import url(app.css);
+/* Register Page Styles */
 
 .register-section {
   width: 100%;
@@ -6,13 +6,16 @@
 }
 
 .register-container {
+  display: flex;
   flex-direction: column;
+  align-items: center; /* Center the container */
   gap: 2rem;
   width: 30%;
 }
 
 .form-heading {
   font-size: 2rem;
+  color: var(--primary-blue); /* Match the color with appointment page */
 }
 
 .register-form {
@@ -22,21 +25,25 @@
   gap: 1.5rem;
 }
 
+/* Updated input styles to match appointment page */
 .form-input,
 textarea,
 select {
   font-size: 1rem;
-  background-color: rgb(234, 234, 234);
+  background-color: #ffffff !important; /* Ensure white background for input fields */
+  border: 1px solid #00abe4 !important; /* Light blue border to match appointment page */
+  border-radius: 5px !important;
   padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 5px;
   font-family: var(--font-family);
+  transition: border-color 0.3s ease !important; /* Smooth border color transition */
 }
 
 .form-input:focus,
 textarea:focus,
 select:focus {
   outline: none;
+  border-color: #0056b3 !important; /* Darker blue for focus state */
+  border-width: 2px !important; /* Make border thicker on focus */
 }
 
 input::-webkit-outer-spin-button,
@@ -59,20 +66,21 @@ input::-webkit-inner-spin-button {
 .prev-btn,
 .submit-btn {
   padding: 0.8rem 1.5rem;
-  background-color: var(--primary-blue);
+  background-color: var(--primary-blue) !important;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px !important; /* Slightly curved border */
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease !important;
 }
 
 .prev-btn:hover,
 .submit-btn:hover {
-  background-color: var(--darker-blue);
+  background-color: var(--darker-blue) !important;
 }
 
+/* Responsive Adjustments */
 @media (max-width: 1184px) {
   .register-container {
     width: 30%;
