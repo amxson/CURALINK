@@ -1,10 +1,40 @@
 @import url(app.css);
 
-.notif-section {
-  height: 70vh;
-  justify-content: flex-start;
+/* Ensure the body and html take full height */
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
+/* Wrapper for content and footer */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+/* Content takes up remaining space */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Footer */
+footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Notif Section */
+.notif-section {
+  padding: 1rem; /* Adjust padding */
+  box-sizing: border-box; /* Ensure padding is included in height */
+  flex: 1;
+}
+
+/* Other styles */
 .disable-btn {
   cursor: no-drop;
 }
@@ -12,10 +42,12 @@
 .disable-btn:hover {
   background-color: rgba(0, 128, 0, 0.528) !important;
 }
+
 .pagination {
   display: flex;
   gap: 9px; 
   justify-content: center; 
+  margin-top: 1rem;
 }
 
 .pagination button {
@@ -27,4 +59,37 @@
 
 .pagination button:hover {
   background-color: #28d33f;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .notif-section {
+    padding: 0.5rem;
+  }
+
+  table {
+    font-size: 0.9rem; /* Slightly smaller text for smaller screens */
+    width: 100%; /* Ensure table takes full width */
+    overflow-x: auto; /* Enable horizontal scroll if needed */
+    display: block;
+  }
+
+  th, td {
+    padding: 0.5rem; /* Adjust padding for smaller screens */
+  }
+
+  .pagination {
+    flex-direction: column; /* Stack pagination buttons vertically */
+    gap: 5px;
+  }
+}
+
+@media (max-width: 576px) {
+  table {
+    font-size: 0.8rem; /* Further reduce text size for very small screens */
+  }
+
+  .pagination {
+    margin-top: 1rem;
+  }
 }
