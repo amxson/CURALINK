@@ -172,7 +172,7 @@ const AdminApplications: React.FC = () => {
               </table>
             </div>
           ) : (
-            <Empty message="No appointments found." />
+            <Empty message="No applications found." />
           )}
         </section>
       )}

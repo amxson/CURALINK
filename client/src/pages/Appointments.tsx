@@ -7,10 +7,12 @@ import fetchData from "../helper/apiCall";
 import { setLoading } from "../redux/reducers/rootSlice";
 import Loading from "../components/Loading";
 import { toast } from "react-hot-toast";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Fixed import
 import axios from "axios";
-import "../styles/user.css";
+import "../styles/appoint.css";
 import { RootState } from "../redux/store";
+
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
 interface Appointment {
   _id: string;
@@ -18,10 +20,12 @@ interface Appointment {
     _id: string;
     firstname: string;
     lastname: string;
+    pic: string;
   };
   userId: {
     firstname: string;
     lastname: string;
+    pic: string;
   };
   date: string;
   status: string;
@@ -34,7 +38,7 @@ interface DecodedToken {
 const Appointments: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const PerPage = 5;
+  const PerPage = 9;
   const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.root);
 
@@ -69,7 +73,11 @@ const Appointments: React.FC = () => {
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {
       pages.push(
-        <button key={i} onClick={() => handlePageChange(i)}>
+        <button
+          key={i}
+          className={`pagination-btn ${currentPage === i ? 'active' : ''}`}
+          onClick={() => handlePageChange(i)}
+        >
           {i}
         </button>
       );
@@ -89,7 +97,7 @@ const Appointments: React.FC = () => {
         {
           appointid: appointment._id,
           doctorId: appointment.doctorId._id,
-          doctorname: `${appointment.userId.firstname} ${appointment.userId.lastname}`,
+          doctorname: `${appointment.doctorId.firstname} ${appointment.doctorId.lastname}`,
         },
         {
           headers: {
@@ -106,7 +114,7 @@ const Appointments: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="wrapper">
       <Navbar />
       {loading ? (
         <Loading />
@@ -116,47 +124,43 @@ const Appointments: React.FC = () => {
 
           {appointments.length > 0 ? (
             <div className="appointments">
-              <table>
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Doctor</th>
-                    <th>Patient</th>
-                    <th>Appointment Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedAppointments.map((appointment, index) => (
-                    <tr key={appointment._id}>
-                      <td>{(currentPage - 1) * PerPage + index + 1}</td>
-                      <td>{`${appointment.doctorId.firstname} ${appointment.doctorId.lastname}`}</td>
-                      <td>{`${appointment.userId.firstname} ${appointment.userId.lastname}`}</td>
-                      <td>{appointment.date}</td>
-                      <td>{appointment.status}</td>
-                      <td>
-                        <button
-                          className="btn user-btn complete-btn"
-                          onClick={() => completeAppointment(appointment)}
-                          disabled={appointment.status === "Completed"}
-                        >
-                          Complete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="pagination">{renderPagination()}</div>
+              {paginatedAppointments.map((appointment) => (
+                <div className="appointment-card" key={appointment._id}>
+                  <div className="patient-info">
+                    <div className="patient-card-img">
+                      <img
+                        src={appointment.userId.pic}
+                        alt={`${appointment.userId.firstname} ${appointment.userId.lastname}`}
+                      />
+                    </div>
+                    <div className="patient-card-info">
+                      <h3>{`${appointment.userId.firstname} ${appointment.userId.lastname}`}</h3>
+                      <p>{`Doctor: ${appointment.doctorId.firstname} ${appointment.doctorId.lastname}`}</p>
+                      <p>Booked for: {new Date(appointment.date).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <div className="status-complete">
+                    <p className="status">{appointment.status}</p>
+                    <button
+                      className="complete-btn"
+                      onClick={() => completeAppointment(appointment)}
+                      disabled={appointment.status === "Completed"}
+                    >
+                      {appointment.status === "Completed" ? "Completed" : "Complete"}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
-            <Empty message="No appointments found." />
+            <Empty message="No appointments available" />
           )}
+
+          <div className="pagination">{renderPagination()}</div>
         </section>
       )}
-      <Footer /> 
-    </>
+      <Footer />
+    </div>
   );
 };
 
