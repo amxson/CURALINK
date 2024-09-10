@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/register.css";
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import axios, { AxiosError } from "axios"; // Import AxiosError for error typing
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
-import { jwtDecode } from 'jwt-decode'; // Update this line
+import {jwtDecode} from 'jwt-decode'; // Correct import for jwtDecode
 import fetchData from "../helper/apiCall";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
@@ -30,7 +30,6 @@ function Login() {
     role: "", 
   });
   const navigate = useNavigate();
-  // const [userRole, setUserRole] = useState(""); // Remove or use as needed
 
   const inputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -43,7 +42,7 @@ function Login() {
   const formSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { email, password, role } = formDetails;
-
+  
     if (!email || !password) {
       return toast.error("Email and password are required");
     } else if (!role) {
@@ -53,7 +52,7 @@ function Login() {
     } else if (password.length < 5) {
       return toast.error("Password must be at least 5 characters long");
     }
-
+  
     try {
       const { data } = await toast.promise(
         axios.post("/api/user/login", {
@@ -63,19 +62,23 @@ function Login() {
         }),
         {
           loading: "Logging in...",
-          success: "Login successfully",
+          success: "Login successful",
           error: "Unable to login user",
         }
       );
-
+  
       localStorage.setItem("token", data.token);
-      const decodedToken = jwtDecode<UserRole>(data.token); // Update this line
-      dispatch(setUserInfo({ id: decodedToken.userId, email })); // Adjust based on actual UserInfo structure
-      // setUserRole(role); // Uncomment if used
+      const decodedToken = jwtDecode<UserRole>(data.token);
+      dispatch(setUserInfo({ id: decodedToken.userId, email }));
       getUser(decodedToken.userId, role);
     } catch (error) {
-      console.error("Login error:", error);
-      toast.error("Login failed");
+      const axiosError = error as AxiosError; // Casting error to AxiosError
+      if (axiosError?.response?.status === 400) {
+        toast.error(axiosError.response?.data as string); // Display specific backend error
+      } else {
+        console.error("Login error:", error);
+        toast.error("Login failed");
+      }
     }
   };
 

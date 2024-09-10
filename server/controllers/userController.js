@@ -38,6 +38,7 @@ const getallusers = async (req, res) => {
   }
 };
 
+
 // User login
 const login = async (req, res) => {
   try {
@@ -46,32 +47,37 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      console.error("Incorrect credentials: user not found"); // Debugging line
-      return res.status(400).send("Incorrect credentials");
+      console.error("Email does not exist"); // Debugging line
+      return res.status(400).send("Email does not exist");
     }
 
+    // Check if the role matches
     if (user.role !== role) {
-      console.error("Role does not match"); // Debugging line
-      return res.status(400).send("Role does not exist");
+      console.error("Role mismatch"); // Debugging line
+      return res.status(400).send("Role mismatch");
     }
 
+    // Check if the password is correct
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.error("Incorrect credentials: password mismatch"); // Debugging line
-      return res.status(400).send("Incorrect credentials");
+      console.error("Incorrect password"); // Debugging line
+      return res.status(400).send("Incorrect password");
     }
 
+    // Generate JWT token after successful login
     const token = jwt.sign(
       { userId: user._id, isAdmin: user.isAdmin, role: user.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "2d" } // Changed to 2 days
     );
+
     return res.status(200).send({ msg: "User logged in successfully", token });
   } catch (error) {
     console.error("Error logging in user:", error); // Debugging line
     res.status(500).send("Unable to login user");
   }
 };
+
 
 const register = async (req, res) => {
   try {
