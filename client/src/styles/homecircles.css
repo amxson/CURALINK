@@ -9,7 +9,7 @@
 .circles-title {
   font-size: 2rem;
   font-weight: bold;
-  color: var(--darker-blue); /* Adjust as needed */
+  color:var(--dark-blue);/*  ; /* Adjust as needed */
   margin-bottom: 1rem; /* Reduced space between title and circles */
 }
 

@@ -1,5 +1,4 @@
 /* Register Page Styles */
-
 .register-section {
   width: 100%;
   height: 100vh;
@@ -63,11 +62,13 @@ input::-webkit-inner-spin-button {
   gap: 1rem; /* Adds space between Previous and Submit buttons */
 }
 
+/* Common button styles for consistency */
 .prev-btn,
-.submit-btn {
+.submit-btn,
+.form-btn {
   padding: 0.8rem 1.5rem;
-  background-color: var(--primary-blue) !important;
-  color: white;
+  background-color: var(--dark-blue) !important; /* Consistent background color */
+  color: white !important;
   border: none;
   border-radius: 8px !important; /* Slightly curved border */
   cursor: pointer;
@@ -76,8 +77,15 @@ input::-webkit-inner-spin-button {
 }
 
 .prev-btn:hover,
-.submit-btn:hover {
-  background-color: var(--darker-blue) !important;
+.submit-btn:hover,
+.form-btn:hover {
+  background-color: var(--darker-blue) !important; /* Consistent hover effect */
+}
+
+/* Adjust for buttons in the form */
+.form-btn {
+  text-align: center;
+  width: 100%;
 }
 
 /* Responsive Adjustments */

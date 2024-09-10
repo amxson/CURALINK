@@ -7,7 +7,7 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem; /* Padding for spacing */
+  padding: 0 9rem; /* Padding for spacing */
 }
 
 .footer-info {

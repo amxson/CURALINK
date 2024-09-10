@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
     <footer>
       <div className="footer-content">
         <div className="footer-info">
-          <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} CURALINK. All rights reserved.</p>
         </div>
         <div className="social">
           <ul>
