@@ -3,13 +3,17 @@
 .hero {
   display: flex;
   height: 90vh;
-  width: 80%;
+  width: 80%;  /* Section width kept as specified */
   margin: 0 auto;
   align-items: center;
   gap: 2rem;
   justify-content: space-between;
 }
-
+.hero-title {
+  font-size: 2.5rem;
+  position: relative;
+  color: var(--dark-blue);
+  animation: fadeIn 1.5s ease-in-out;}
 .hero-content {
   display: flex;
   flex-direction: column;
@@ -23,27 +27,74 @@
 
 .hero-img {
   flex: 1;
+  position: relative;
 }
 
 .hero-img img {
   width: 100%;
+  animation: slideIn 1.8s ease-in-out, hoverEffect 8s ease-in-out infinite;  /* Adding back the image animation */
 }
 
-.about {
-  display: flex;
-  margin: 0 auto;
-  align-items: center;
-  gap: 2rem;
-  justify-content: space-between;
+/* Slide-in animation for the image */
+@keyframes slideIn {
+  0% {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Hover effect for the image */
+@keyframes hoverEffect {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* SVG heartbeat animation */
+.heartbeat-container {
+  margin-top: 1rem;
+  width: 100%;
+  height: 60px; /* Keeping this consistent */
+  overflow: hidden;
+  position: relative;
+}
+
+.heartbeat-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.heartbeat-polyline {
+  stroke-dasharray: 800;  /* Increased for wider path */
+  stroke-dashoffset: 800;
+  animation: heartbeat-animation 8s infinite;  /* Slower animation for extended width */
+}
+
+@keyframes heartbeat-animation {
+  0% {
+    stroke-dashoffset: 800;
+  }
+  20% {
+    stroke-dashoffset: 0;
+  }
+  80% {
+    stroke-dashoffset: -800;
+  }
+  100% {
+    stroke-dashoffset: -1600;
+  }
 }
 
 @media screen and (max-width: 770px) {
   .hero {
-    height: auto;
-  }
-  .hero,
-  .about {
-    flex-direction: column;
+    height: auto;  /* Ensure responsive height */
   }
   .hero-content {
     margin-top: 2rem;
@@ -52,7 +103,8 @@
   .hero-content h1 {
     text-align: center;
   }
-  .about-heading {
-    margin-top: 4rem;
+  .hero,
+  .about {
+    flex-direction: column;
   }
 }
