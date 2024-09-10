@@ -83,14 +83,4 @@ This Doctor Appointment System is a web application built using the MERN stack (
 4. Apply for doctor status, manage appointments, and update details as a Doctor.
 5. Book appointments, manage profile, and receive updates as a Patient/User.
 
-## Contributing
 
-Contributions are welcome! Please follow the guidelines outlined in CONTRIBUTING.md.
-
-## License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
----
-
-Feel free to customize this template further to suit your specific project details and requirements.
