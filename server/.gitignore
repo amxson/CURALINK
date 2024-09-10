@@ -5,3 +5,4 @@ node_modules/
 
 # Ignore .env file
 .env
+debug.log
