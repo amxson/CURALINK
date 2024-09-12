@@ -8,7 +8,7 @@ import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import fetchData from "../helper/apiCall";
-import {jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { RootState } from "../redux/store";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
@@ -85,9 +85,31 @@ const Profile: React.FC = () => {
     });
   };
 
+  const validateForm = () => {
+    const { email, mobile, age, password, confpassword } = formDetails;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const mobileRegex = /^\d{10,14}$/; // Assumes a phone number of 10 to 14 digits
+    const ageRegex = /^(?:1[89]|[2-9]\d)$/; // Assumes age range from 18 to 99
+
+    if (!email || !emailRegex.test(email)) {
+      return toast.error("Please enter a valid email address.");
+    } else if (!mobile || !mobileRegex.test(mobile)) {
+      return toast.error("Please enter a valid phone number (10-14 digits).");
+    } else if (!age || !ageRegex.test(age)) {
+      return toast.error("Age must be a valid number between 18 and 99.");
+    } else if (password.length < 5) {
+      return toast.error("Password must be at least 5 characters long.");
+    } else if (password !== confpassword) {
+      return toast.error("Passwords do not match.");
+    }
+    return true;
+  };
+
   const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
     try {
-      e.preventDefault();
       const {
         firstname,
         lastname,
@@ -97,21 +119,8 @@ const Profile: React.FC = () => {
         address,
         gender,
         password,
-        confpassword,
       } = formDetails;
 
-      if (!email) {
-        return toast.error("Email should not be empty");
-      } else if (firstname.length < 3) {
-        return toast.error("First name must be at least 3 characters long");
-      } else if (lastname.length < 3) {
-        return toast.error("Last name must be at least 3 characters long");
-      } else if (password.length < 5) {
-        return toast.error("Password must be at least 5 characters long");
-      } else if (password !== confpassword) {
-        return toast.error("Passwords do not match");
-      }
-      
       await toast.promise(
         axios.put(
           "/api/user/updateprofile",
@@ -259,6 +268,6 @@ const Profile: React.FC = () => {
       <Footer />
     </>
   );
-}
+};
 
 export default Profile;
