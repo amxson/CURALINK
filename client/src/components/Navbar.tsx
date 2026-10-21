@@ -99,7 +99,7 @@ useEffect(() => {
           <NavLink to={"/"}>CuraLink</NavLink>
         </h2>
 
-        <ul className="nav-links">
+        <ul className="nav-links" onClick={() => setIconActive(false)}>
           <li><NavLink to={"/"}>Home</NavLink></li>
 
           {/* DOCTOR LOGIC */}
@@ -120,8 +120,10 @@ useEffect(() => {
 
           {/* ADMIN LOGIC (Optional but good to have) */}
           {user?.role === "Admin" && (
-            <li><NavLink to={"/dashboard"}>Admin Panel</NavLink></li>
+            <li><NavLink to={"/dashboard/home"}>Admin Panel</NavLink></li>
           )}
+
+          {["Technician", "Admin"].includes(user?.role || "") && <li><NavLink to="/lab-dashboard">Laboratory</NavLink></li>}
 
           {/* SHARED LINKS */}
           {token && (
@@ -158,9 +160,9 @@ useEffect(() => {
         )}
       </nav>
 
-      <div className="menu-icons" onClick={() => setIconActive(!iconActive)}>
+      <button type="button" aria-label="Toggle navigation" aria-expanded={iconActive} className="menu-icons" onClick={() => setIconActive(!iconActive)}>
         {iconActive ? <RxCross1 /> : <FiMenu />}
-      </div>
+      </button>
     </header>
   );
 };

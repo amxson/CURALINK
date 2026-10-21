@@ -65,6 +65,10 @@ nav {
 }
 
 .menu-icons {
+  background: transparent;
+  border: 0;
+  color: var(--bold-text-color);
+  cursor: pointer;
   display: none;
   z-index: 100;
   font-size: 1.5rem;
@@ -79,7 +83,8 @@ nav {
     height: 100vh;
     background-color: var(--light-blue);
     flex-direction: column;
-    transform: translateX(100%);
+    display: none;
+    transform: none;
     justify-content: center;
     align-items: center;
     visibility: hidden;
@@ -89,6 +94,7 @@ nav {
   }
 
   .nav-active .nav-links {
+    display: flex;
     transform: translateX(0%);
     visibility: visible;
   }
