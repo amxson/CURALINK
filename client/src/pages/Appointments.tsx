@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Empty from "../components/Empty";
 import fetchData from "../helper/apiCall";
-import { setLoading, setOpdAppointments, setOpdLoading } from "../redux/reducers/rootSlice";
+import { setLoading, setOpdAppointments } from "../redux/reducers/rootSlice";
 import Loading from "../components/Loading";
 import { toast } from "react-hot-toast";
 import PrescriptionModal from "../components/PrescriptionModal";
