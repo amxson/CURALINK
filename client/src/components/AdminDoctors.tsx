@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { FaSearch, FaUserMd, FaFilter, FaBriefcase, FaMoneyBillWave, FaTrashAlt } from "react-icons/fa";
+import { FaSearch, FaFilter, FaBriefcase, FaMoneyBillWave, FaTrashAlt } from "react-icons/fa";
 import Loading from "./Loading";
 import Empty from "./Empty";
 import { setLoading } from "../redux/reducers/rootSlice";

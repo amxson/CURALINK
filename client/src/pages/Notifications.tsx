@@ -98,7 +98,7 @@ const Notifications: React.FC = () => {
     } finally {
       setLocalLoading(false);
     }
-  }, [userInfo?._id, userInfo?.role, userInfo?.userId, isDoctor]);
+  }, [userInfo?._id, userInfo?.userId, isDoctor]);
 
   useEffect(() => {
     if (userInfo?._id || userInfo?.userId) getPageData();

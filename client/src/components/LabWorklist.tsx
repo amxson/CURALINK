@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UploadResultModal from "./UploadResultModal";
-import { FiFileText, FiUser, FiLayers, FiInfo, FiCheckCircle, FiFolder } from "react-icons/fi";
+import { FiCheckCircle, FiFolder } from "react-icons/fi";
 import "../styles/labworklist.css";
 
 const LabWorklist: React.FC = () => {

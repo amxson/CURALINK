@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { FaSearch, FaUserMinus, FaFilter, FaEnvelope, FaPhoneAlt, FaUserInjured, FaCalendarCheck, FaChartLine } from "react-icons/fa";

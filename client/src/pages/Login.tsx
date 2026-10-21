@@ -12,10 +12,6 @@ import fetchData from "../helper/apiCall";
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
 // Match these interfaces exactly to your Redux rootSlice
-interface UserRole {
-  userId: string;
-  role: string;
-}
 
 interface UserInfo {
   _id: string;

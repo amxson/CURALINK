@@ -29,7 +29,7 @@ const Chatbot: React.FC = () => {
     if (isModalOpen && messages.length === 0) {
       setMessages([{ text: "Hello! Describe your symptoms, and I'll help you find the right doctor.", user: false }]);
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, messages.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

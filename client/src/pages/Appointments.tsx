@@ -11,7 +11,7 @@ import PrescriptionModal from "../components/PrescriptionModal";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 import {
-  FiSearch, FiCalendar, FiUser, FiCheck, FiX,
+  FiSearch, FiCalendar, FiCheck, FiX,
   FiActivity, FiFileText, FiGitCommit, FiGitBranch
 } from "react-icons/fi";
 import "../styles/appoint.css";
