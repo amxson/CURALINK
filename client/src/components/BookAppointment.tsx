@@ -1,36 +1,32 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import "../styles/bookappointment.css";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { IoMdClose } from "react-icons/io";
-
-interface User {
-  _id: string;
-  firstname: string;
-  lastname: string;
-}
-
-interface Ele {
-  userId?: User;
-}
+import { FiX, FiCalendar, FiClock, FiMapPin, FiActivity } from "react-icons/fi";
 
 interface BookAppointmentProps {
   setModalOpen: (open: boolean) => void;
-  ele: Ele;
+  ele: any;
 }
 
 const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) => {
-  const [formDetails, setFormDetails] = useState<{ date: string; time: string }>({
+  const [formDetails, setFormDetails] = useState({
     date: "",
     time: "",
+    opdType: "",
+    roomNumber: "",
   });
 
-  const inputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
+  const inputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormDetails({
-      ...formDetails,
-      [name]: value,
-    });
+    setFormDetails(prev => ({ ...prev, [name]: value }));
   };
 
   const bookAppointment = async (e: FormEvent<HTMLFormElement>) => {
@@ -38,68 +34,106 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) 
     try {
       await toast.promise(
         axios.post(
-          "/api/appointment/bookappointment",
+          "/api/appointment/opd/create",
           {
             doctorId: ele?.userId?._id,
             date: formDetails.date,
             time: formDetails.time,
-            doctorname: `${ele?.userId?.firstname} ${ele?.userId?.lastname}`,
+            doctorname: `Dr. ${ele?.userId?.firstname} ${ele?.userId?.lastname}`,
+            opdType: formDetails.opdType,
+            roomNumber: formDetails.roomNumber,
           },
           {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           }
         ),
         {
-          success: "Appointment booked successfully",
+          success: "Appointment booked successfully!",
           error: "Unable to book appointment",
-          loading: "Booking appointment...",
+          loading: "Booking in progress...",
         }
       );
       setModalOpen(false);
     } catch (error) {
-      console.error("Error booking appointment:", error);
-      toast.error("Unable to book appointment");
+      console.error("Booking Error:", error);
     }
   };
 
   return (
-    <>
-      <div className="modal flex-center">
-        <div className="modal__content">
-          <h2 className="page-heading">Book Appointment</h2>
-          <IoMdClose
-            onClick={() => setModalOpen(false)}
-            className="close-btn"
-          />
-          <div className="register-container flex-center book">
-            <form className="register-form" onSubmit={bookAppointment}>
+    <div className="modal-overlay" onClick={() => setModalOpen(false)}>
+      <div className="modal-content appointment-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <div>
+            <h3>Schedule Follow-up</h3>
+            <p className="modal-subtitle">Dr. {ele?.userId?.firstname} {ele?.userId?.lastname}</p>
+          </div>
+          <button className="close-btn" onClick={() => setModalOpen(false)}>
+            <FiX size={20} />
+          </button>
+        </div>
+
+        <form className="appointment-form" onSubmit={bookAppointment}>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label"><FiCalendar size={14} /> Date</label>
               <input
                 type="date"
                 name="date"
                 className="form-input"
                 value={formDetails.date}
                 onChange={inputChange}
+                required
               />
+            </div>
+            <div className="form-group">
+              <label className="form-label"><FiClock size={14} /> Time Slot</label>
               <input
                 type="time"
                 name="time"
                 className="form-input"
                 value={formDetails.time}
                 onChange={inputChange}
+                required
               />
-              <button
-                type="submit"
-                className="btn form-btn"
-              >
-                Book
-              </button>
-            </form>
+            </div>
           </div>
-        </div>
+
+          <div className="form-group">
+            <label className="form-label"><FiActivity size={14} /> OPD Type</label>
+            <select
+              name="opdType"
+              className="form-input"
+              value={formDetails.opdType}
+              onChange={inputChange}
+              required
+            >
+              <option value="">Choose OPD Category</option>
+              <option value="General">General Consultation</option>
+              <option value="Specialist">Specialist Review</option>
+              <option value="Emergency">Emergency Follow-up</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label"><FiMapPin size={14} /> Room Number (Optional)</label>
+            <input
+              type="text"
+              name="roomNumber"
+              className="form-input"
+              placeholder="e.g. Wing A, Room 302"
+              value={formDetails.roomNumber}
+              onChange={inputChange}
+            />
+          </div>
+
+          <div className="modal-footer">
+            <button type="submit" className="btn-confirm-booking">
+              Confirm & Schedule
+            </button>
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

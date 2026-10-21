@@ -1,85 +1,74 @@
 import React from "react";
-import {
-  FaHome,
-  FaList,
-  FaUser,
-  FaUserMd,
-  FaUsers,
-  FaEnvelope,
-} from "react-icons/fa";
-import "../styles/sidebar.css";
 import { NavLink, useNavigate } from "react-router-dom";
-import { MdLogout } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
+import "../styles/sidebar.css";
+
+import {
+  FaHome, FaList, FaUser, FaUsers, FaUserPlus,
+  FaEnvelope, FaUserMd, FaCommentAlt, FaStethoscope
+} from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const sidebar = [
-    {
-      name: "Home",
-      path: "/dashboard/home",
-      icon: <FaHome />,
-    },
-    {
-      name: "Patients", // Updated name
-      path: "/dashboard/users", // Updated path
-      icon: <FaUsers />,
-    },
-    {
-      name: "Doctors",
-      path: "/dashboard/doctors",
-      icon: <FaUserMd />,
-    },
-    {
-      name: "Appointments",
-      path: "/dashboard/appointments",
-      icon: <FaList />,
-    },
-    {
-      name: "Applications",
-      path: "/dashboard/applications",
-      icon: <FaEnvelope />,
-    },
-    {
-      name: "Profile",
-      path: "/dashboard/aprofile",
-      icon: <FaUser />,
-    },
-    {
-      name: "Contact Messages",
-      path: "/dashboard/contactMessages",
-      icon: <FaEnvelope />,
-    },
+  const sidebarItems = [
+    { name: "Home", path: "/dashboard/home", icon: <FaHome /> },
+    { name: "Patients", path: "/dashboard/users", icon: <FaUsers /> },
+    { name: "Doctors", path: "/dashboard/doctors", icon: <FaUserMd /> },
+    { name: "Appointments", path: "/dashboard/appointments", icon: <FaList /> },
+    { name: "Add Staff", path: "/dashboard/addstaff", icon: <FaUserPlus /> },
+    { name: "Applications", path: "/dashboard/applications", icon: <FaEnvelope /> },
+    { name: "Support", path: "/dashboard/contactMessages", icon: <FaCommentAlt /> },
+    { name: "Profile", path: "/dashboard/aprofile", icon: <FaUser /> },
   ];
 
   const logoutFunc = () => {
-    dispatch(setUserInfo({ id: '', email: '' })); // Provide default values
+    // Update to include _id and role
+    dispatch(setUserInfo({ _id: "", email: "", role: "" }));
     localStorage.removeItem("token");
     navigate("/login");
   };
 
   return (
-    <>
-      <section className="sidebar-section flex-center">
-        <div className="sidebar-container">
-          <ul>
-            {sidebar.map((item, index) => (
-              <li key={index}>
-                {item.icon}
-                <NavLink to={item.path}>{item.name}</NavLink>
-              </li>
-            ))}
-          </ul>
-          <div className="logout-container">
-            <MdLogout />
-            <p onClick={logoutFunc}>Logout</p>
-          </div>
+    <aside className="sidebar-section">
+      <div className="sidebar-brand">
+        <div className="brand-icon">
+          <FaStethoscope />
         </div>
-      </section>
-    </>
+        <div className="brand-text">
+          <h2>Cura<span>Link</span></h2>
+          <p>Admin Panel</p>
+        </div>
+      </div>
+
+      <nav className="sidebar-container">
+        <ul className="sidebar-menu">
+          {sidebarItems.map((item, index) => (
+            <li key={index}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+              >
+                <span className="icon-wrapper">{item.icon}</span>
+                <span className="link-text">{item.name}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="sidebar-footer">
+          <button className="logout-btn" onClick={logoutFunc}>
+            <div className="icon-wrapper">
+              <MdLogout />
+            </div>
+            <span className="link-text">Sign Out</span>
+          </button>
+        </div>
+      </nav>
+    </aside>
   );
 };
 

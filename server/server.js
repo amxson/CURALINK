@@ -1,143 +1,189 @@
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios");
-const session = require('express-session');
-const fs = require('fs');
-
+const session = require("express-session");
 require("dotenv").config();
 require("./db/conn");
+
+// 1. Official SDK Import
+const { GoogleGenAI } = require("@google/genai");
+
+const Doctor = require("./models/doctorModel");
 const userRouter = require("./routes/userRoutes");
 const doctorRouter = require("./routes/doctorRoutes");
 const appointRouter = require("./routes/appointRoutes");
-const contactroute = require('./routes/contactRoutes');
+const contactroute = require("./routes/contactRoutes");
 const notificationRouter = require("./routes/notificationRouter");
+const prescriptionRoutes = require("./routes/prescriptionRoutes");
+
 
 const app = express();
+app.set("trust proxy", 1);
 const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
+// 2. Initialize AI with your API Key
+const ai = process.env.GEMINI_API_KEY ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }) : null;
+
+const specializations = [
+  "General Practitioner", "Neurologist", "Cardiologist", "ENT Specialist",
+  "Dermatologist", "Pediatrician", "Orthopedic Surgeon", "Gynecologist",
+  "Psychiatrist", "Ophthalmologist", "Urologist", "Oncologist",
+  "Endocrinologist", "Gastroenterologist", "Pulmonologist", "Rheumatologist",
+  "Nephrologist", "Hematologist", "Anesthesiologist", "Emergency Medicine",
+  "Pathologist", "Radiologist", "Plastic Surgeon", "Infectious Disease Specialist",
+  "Physiotherapist",
+];
+
+/* ===========================
+    MIDDLEWARE
+=========================== */
+app.use(cors({
+  origin: ["http://localhost:3000", "https://curalink.vercel.app", process.env.CLIENT_URL].filter(Boolean),
+  credentials: true,
 }));
 
-// Debug Middleware
-app.use((req, res, next) => {
-  console.log('Session ID:', req.sessionID);
-  console.log('Session Data:', req.session);
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-  fs.appendFileSync('debug.log', `Session ID: ${req.sessionID}\nSession Data: ${JSON.stringify(req.session, null, 2)}\n\n`);
+app.use(session({
+  secret: process.env.SESSION_SECRET || process.env.JWT_SECRET_KEY || require("crypto").randomBytes(32).toString("hex"),
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", httpOnly: true },
+}));
 
-  next();
-});
-
-// Routes
+/* ===========================
+    ROUTES
+=========================== */
 app.use("/api/user", userRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/appointment", appointRouter);
 app.use("/api/notification", notificationRouter);
 app.use("/api/contact", contactroute);
+app.use("/api/lab", require("./routes/labRoutes"));
+app.use("/api/prescription", prescriptionRoutes);
 
-app.post('/api/chat/clear-context', (req, res) => {
-  req.session.context = [];
-  res.json({ message: 'Session context cleared' });
-});
 
-// Chat Route
-app.post('/api/chat', async (req, res) => {
-  const { prompt, clearContext } = req.body;
+const SYSTEM_PROMPT = `
+You are the CuraLink Healthcare Assistant.
+AVAILABLE DEPARTMENTS: ${specializations.join(", ")}
 
-  if (!prompt) {
-    return res.status(400).json({ error: 'Prompt is required' });
+RULES:
+1. If symptoms are vague, ask 2-3 clarifying questions to act as a symptom checker.
+2. Once symptoms are identified, suggest exactly ONE or TWO departments from the list above.
+3. You MUST use the exact words from the list so the system can match doctors.
+4. Inform the user they can book an appointment using the doctor cards appearing below.
+5. Be professional, empathetic, and never provide specific drug prescriptions.
+`;
+
+/* ===========================
+    SDK-BASED CHAT ROUTE
+=========================== */
+/* ===========================
+    FIXED SDK-BASED CHAT ROUTE
+=========================== */
+app.post("/api/chat", async (req, res) => {
+  const { prompt } = req.body;
+  if (typeof prompt !== "string" || !prompt.trim()) return res.status(400).json({ error: "Prompt is required" });
+
+  // 1. Emergency Check
+  const emergencyKeywords = ["chest pain", "shortness of breath", "heart attack", "heavy bleeding", "unconscious"];
+  if (emergencyKeywords.some(k => prompt.toLowerCase().includes(k))) {
+    return res.json({
+      message: "🚨 **EMERGENCY**: Please go to the nearest Emergency Room immediately or call emergency services.",
+      doctors: []
+    });
   }
 
-  // Clear the session context if requested
-  if (clearContext) {
-    req.session.context = [];
-    return res.json({ message: 'Session context cleared' });
-  }
-
-  // Initialize or retrieve the conversation context from the session
-  const sessionContext = req.session.context || [];
-
-  // Add the new user prompt to the context
-  sessionContext.push({ role: 'user', content: prompt });
-
-  // Keep only the last two user prompts in the context
-  const recentUserPrompts = sessionContext
-    .filter(ctx => ctx.role === 'user')
-    .slice(-2); // Get last two user prompts
-
-  // Prepare payload with the last two user prompts and the new prompt
-  const payload = {
-    contents: [
-      ...recentUserPrompts.map(ctx => ({
-        parts: [{ text: ctx.content }],
-        role: ctx.role
-      })),
-      {
-        parts: [{ text: prompt }],
-        role: 'user'
-      }
-    ]
-  };
-
-  console.log('Sending payload to Gemini API:', JSON.stringify(payload, null, 2));
+  if (!req.session.chat) req.session.chat = [];
 
   try {
-    const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      payload,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    if (!ai) return res.status(503).json({ message: "The CuraLink assistant is not configured yet.", doctors: [] });
+    // 2. Prepare History for SDK
+    const history = req.session.chat.slice(-6).map(m => ({
+      role: m.role === "user" ? "user" : "model",
+      parts: [{ text: m.content }]
+    }));
 
-    console.log('Gemini API response:', JSON.stringify(response.data, null, 2));
+    // 3. Generate Content using Gemini 3 Flash
+    const result = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: [
+        { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
+        { role: "model", parts: [{ text: "Understood. I will help users find the right medical department." }] },
+        ...history,
+        { role: "user", parts: [{ text: prompt }] }
+      ],
+    });
 
-    if (
-      response.data &&
-      response.data.candidates &&
-      response.data.candidates[0] &&
-      response.data.candidates[0].content &&
-      response.data.candidates[0].content.parts &&
-      response.data.candidates[0].content.parts[0] &&
-      response.data.candidates[0].content.parts[0].text
-    ) {
-      const message = response.data.candidates[0].content.parts[0].text;
+    const aiReply = result.text;
 
-      // Add the bot's response to the conversation context
-      sessionContext.push({ role: 'bot', content: message });
-      req.session.context = sessionContext;
+    // Save to session history
+    req.session.chat.push({ role: "user", content: prompt });
+    req.session.chat.push({ role: "model", content: aiReply });
 
-      res.json({ message });
-    } else {
-      res.status(500).json({ error: 'Unexpected API response structure', details: response.data });
-    }
-  } catch (error) {
-    console.error('Error calling Gemini API:', error.message);
-    if (error.response) {
-      console.error('API Error Response Data:', JSON.stringify(error.response.data, null, 2));
-      console.error('API Error Response Status:', error.response.status);
-      console.error('API Error Response Headers:', JSON.stringify(error.response.headers, null, 2));
-    } else if (error.request) {
-      console.error('API Error Request Data:', JSON.stringify(error.request, null, 2));
-    } else {
-      console.error('API Error Message:', error.message);
-    }
-    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    // 4. Regex Matching Engine
+    const combinedText = (aiReply + " " + prompt).toLowerCase();
+    const matchedSpecs = specializations.filter(spec => {
+      const rootWord = spec.split(' ')[0].toLowerCase();
+      const regex = new RegExp(rootWord, 'i');
+      return regex.test(combinedText);
+    });
+
+    // 5. FETCH DOCTORS - UPDATED FOR NOTIFICATIONS
+    const allDoctors = await Doctor.find({
+      isDoctor: true,
+      specialization: { $in: matchedSpecs }
+    }).populate("userId");
+
+    const doctorCards = allDoctors.filter(doc => doc.userId).map(doc => {
+      // We must ensure the userId object is fully intact
+      // because your notification logic likely calls: doctor.userId.firstname
+      return {
+        _id: doc._id.toString(), // Ensure ID is a string
+        specialization: doc.specialization,
+        fees: doc.fees,
+        status: doc.status || "Approved",
+        // NESTED USERID OBJECT: This is the key to fixing 'undefined'
+        userId: {
+          _id: doc.userId._id.toString(),
+          firstname: doc.userId.firstname,
+          lastname: doc.userId.lastname,
+          email: doc.userId.email,
+          pic: doc.userId.pic,
+          role: doc.userId.role
+        },
+        // Frontend display helper
+        name: `Dr. ${doc.userId.firstname} ${doc.userId.lastname}`,
+        availableDates: Array.from({ length: 7 }, (_, i) => { const day = new Date(); day.setDate(day.getDate() + i + 1); return day.toISOString().slice(0, 10); }),
+        availableTimes: ["10:00 AM", "12:00 PM", "02:00 PM", "04:00 PM"]
+      };
+    });
+
+    return res.json({
+      message: aiReply,
+      doctors: doctorCards.slice(0, 4)
+    });
+
+  } catch (err) {
+    console.error("Gemini SDK Error:", err);
+    return res.status(500).json({
+      message: "⚠️ AI service is currently unavailable.",
+      doctors: []
+    });
   }
 });
 
-
-
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+/* ===========================
+    CONTEXT MANAGEMENT
+=========================== */
+app.post("/api/chat/clear-context", (req, res) => {
+  req.session.chat = [];
+  res.json({ message: "Chat history cleared" });
 });
+
+app.get("/api/health", (req, res) => res.json({ service: "CuraLink", database: require("mongoose").connection.readyState === 1 ? "connected" : "disconnected" }));
+
+if (require.main === module) {
+  app.listen(port, () => console.log(`CuraLink server is running on port ${port}`));
+}
+module.exports = app;

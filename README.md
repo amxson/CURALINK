@@ -1,86 +1,49 @@
+# CuraLink
 
-# Doctor Appointment System
-
-This Doctor Appointment System is a web application built using the MERN stack (MongoDB, Express.js, React.js, Node.js). It provides a platform for managing appointments between doctors and patients, with distinct functionalities for Admins, Doctors, and Patients/Users.
+Doctor appointment and care coordination platform using React, TypeScript, Express, and MongoDB.
 
 ## Features
 
-### Admin Section
+- Patient registration, profiles, password changes, and password reset email.
+- Doctor directory with specialization filters, appointments and OPD bookings.
+- Doctor applications, admin approval, patient and doctor management, analytics.
+- Admin staff creation for doctors and laboratory technicians.
+- Lab requests, technician worklists, result uploads, patient histories and report downloads.
+- Doctor prescriptions and patient prescription history.
+- Notifications and contact message management.
+- Gemini assistant with department matching and doctor cards.
 
-- **Home**
-  - Displays total numbers of doctors, patients, and users.
-  - Graphical representation of data.
+## Local setup
 
-- **User Management**
-  - View and remove user information.
+Use Node.js 22. Copy `server/.env.example` to `server/.env` and `client/.env.example` to `client/.env.local`, then configure your own values.
 
-- **Doctor Management**
-  - View and remove doctor information.
+```sh
+cd server
+npm ci
+npm start
+# In another terminal
+cd client
+npm ci --legacy-peer-deps
+npm start
+```
 
-- **Appointment Management**
-  - View appointment statuses.
+## Deployment
 
-- **Application Management**
-  - Manage applications from users applying for doctor status.
-  - Approve applications to convert users into doctors.
+Frontend: Vercel project **curalink**, root directory `client`, install `npm ci --legacy-peer-deps`, build `npm run build`, output `build`. Production URL: https://curalink.vercel.app.
 
-- **Profile**
-  - Update admin details.
+Backend: existing Render service, root directory `server`, install `npm ci`, start `npm start`. `render.yaml` documents the service configuration. Set `CLIENT_URL=https://curalink.vercel.app` and configure MongoDB, JWT, session, Gemini and email environment values on Render. Set Vercel's `REACT_APP_SERVER_DOMAIN` to this service's URL. All API requests, including report downloads, use that setting.
 
-### Doctor Section
+`GET /api/health` reports the API service and database connection state. Gemini and password reset email require their respective service credentials.
 
-- **Apply for Doctor**
-  - Apply for doctor status.
+## Validation
 
-- **Appointment Management**
-  - View booked appointments, including pending and completed ones.
+```sh
+cd client
+npm run build
+cd ../server
+npm test
+```
 
-- **Notifications**
-  - Display updates related to appointments and status changes.
+## Source attribution
 
-- **Profile**
-  - Update doctor details.
-
-- **Change Password**
-  - Update doctor password.
-
-### Patient/User Section
-
-- **Doctor Section**
-  - Book appointments with preferred doctors.
-
-- **Notifications**
-  - Display updates related to appointments.
-
-- **Profile**
-  - Update user details.
-
-- **Change Password**
-  - Update user password.
-
-## Installation
-
-1. Clone the repository.
-2. Navigate to the project directory.
-3. Install dependencies using `npm install`.
-4. Configure environment variables as needed.
-5. Start the development server using `npm start`.
-
-## Technologies Used
-
-- Frontend: React.js, Redux, React Router,react-dom, react-redux, react-spinners, jwt-decode, react-time-picker, react-icon, react-countup, dotenv
-- Backend: Node.js, Express.js, bcrypt, cors, dotenv, nodemailer,
-- Database: MongoDB, mongoose
-- Authentication: JWT (JSON Web Tokens)
-- Styling: CSS
-- Other: Axios, React Hot Toast, recharts
-
-## Usage
-
-1. Register as an Admin, Doctor, or Patient/User.
-2. Explore the respective functionalities based on your role.
-3. Manage appointments, users, doctors, and applications as an Admin.
-4. Apply for doctor status, manage appointments, and update details as a Doctor.
-5. Book appointments, manage profile, and receive updates as a Patient/User.
-
-
+CuraLink's original appointment system is maintained in `amxson/CURALINK`. The expanded lab, prescription, staff, OPD and assistant workflows were adapted from [MAYSHLMAY/cura_link](https://github.com/MAYSHLMAY/cura_link/tree/04c051b), with CuraLink branding and integration fixes. Generated builds and database seed scripts are excluded from this import.

@@ -1,6 +1,6 @@
 @import url(app.css);
 .form-heading{
-  color:var(--dark-blue)
+  color:#2e384d
 }
 .contact-container {
   flex-direction: column;

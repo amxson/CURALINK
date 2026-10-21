@@ -24,9 +24,9 @@ const Hero: React.FC = () => {
           >
             <polyline
               fill="none"
-              stroke="#0a74da"
+              stroke="#2e384d"
               strokeWidth="2.5"
-              points="0,30 20,30 40,5 60,55 80,30 100,30 120,55 140,5 160,30 180,30 200,5 220,55 240,30 260,30 280,5 300,55 320,30 400,30"  
+              points="0,30 20,30 40,5 60,55 80,30 100,30 120,55 140,5 160,30 180,30 200,5 220,55 240,30 260,30 280,5 300,55 320,30 400,30"
               className="heartbeat-polyline"
             />
           </svg>
@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
       <div className="hero-img">
         <img
           src={image}
-          alt="Hero image showcasing healthcare service"
+          alt="Hero  showcasing healthcare service"
           className="animated-image"
         />
       </div>

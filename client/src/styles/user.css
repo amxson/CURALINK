@@ -101,7 +101,7 @@ textarea,select{
   border: none;
   border-radius: 5px;
   font-family: var(--font-family);
-  
+
 }
 .ayx{
   display: flex;
@@ -109,8 +109,8 @@ textarea,select{
 }
 .pagination {
   display: flex;
-  gap: 9px; 
-  justify-content: center; 
+  gap: 9px;
+  justify-content: center;
 }
 
 .pagination button {

@@ -1,41 +1,180 @@
-@import url("app.css");
-
-.doctors {
-  margin-bottom: 5rem;
+/* --- MAIN LAYOUT --- */
+.doctors-page {
+  background-color: #f8fafc; /* Softer professional grey-blue */
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
 }
 
-.doctors-card-container {
+.doctora-page {
+  margin-top: 6em;
+}
+
+/* --- HERO SECTION --- */
+.doctors-hero {
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+  padding: 60px 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3rem); /* Dynamic font size */
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+/* --- DYNAMIC FILTER BAR --- */
+.filter-bar {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 3rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  padding: 12px;
+  border-radius: 50px; /* Rounded pill shape */
+  gap: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-input-wrapper, .select-wrapper {
+  background: white;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(0, 171, 228, 0.4);
+}
+
+.search-input-wrapper input, .select-wrapper select {
   width: 100%;
+  border: none;
+  padding: 12px 0;
+  outline: none;
+  font-size: 0.95rem;
+  color: #333;
 }
 
-/* Ensure the doctor section's title and container spacing */
-.page-heading {
-  margin-bottom: 2rem; /* Adjust this value to align with the spacing used in other sections */
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center; /* Center-align title */
-}
+.search-input-wrapper { flex: 2; }
+.select-wrapper { flex: 1; }
 
-/* Responsive Adjustments */
-@media (max-width: 1024px) {
-  .doctors-card-container {
-    gap: 1rem; /* Adjust gap for medium-sized screens */
-  }
+/* --- THE DYNAMIC GRID --- */
+.doctor-card-container {
+  display: grid;
+  /* DYNAMIC: Automatically switches columns based on width */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-  .doctors-card-container {
-    gap: 0.5rem; /* Reduce gap for smaller screens */
+  .filter-bar {
+    flex-direction: column;
+    border-radius: 20px;
   }
+  .doctors-hero { padding: 40px 15px; }
 }
 
-@media (max-width: 576px) {
-  .doctors-card-container {
-    gap: 0.2rem; /* Further reduce gap for very small screens */
-    padding: 0.5rem; /* Adjust padding for small screens */
+
+
+/* --- HERO SECTION: Slimmed Down --- */
+.doctors-hero-section {
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+  padding: 40px 20px; /* Reduced from 80px to 40px */
+  text-align: center;
+  color: white;
+  z-index: 9;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.page-heading {
+  font-size: 1.8rem; /* Scaled down for a sleeker look */
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+
+.hero-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+/* --- THE FILTER PILL: Thinner & More Compact --- */
+.filter-container {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 6px; /* Tightened padding */
+  border-radius: 50px;
+  gap: 8px;
+  max-width: 700px; /* Narrower overall width */
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Search Bar & Select: Reduced Height */
+.search-bar, .spec-select {
+  background: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px; /* Reduced padding from 15px to 10px */
+  font-size: 0.9rem; /* Smaller font */
+  outline: none;
+  transition: all 0.3s ease;
+  color: #1e293b;
+  height: 40px; /* Forced consistent height */
+}
+
+.search-bar {
+  flex: 2;
+}
+
+.spec-select {
+  flex: 1;
+  max-width: 200px; /* Prevents the dropdown from being too wide */
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+}
+
+.search-bar:focus, .spec-select:focus {
+  box-shadow: 0 0 0 3px rgba(0, 171, 228, 0.3);
+}
+
+/* Mobile: Ensuring it stays slim but usable */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .search-bar, .spec-select {
+    width: 100%;
+    max-width: none;
+    border-radius: 10px;
+  }
+
+  .doctors-hero-section {
+    padding: 30px 15px;
   }
 }

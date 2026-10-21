@@ -1,0 +1,168 @@
+.lab-worklist-container {
+  padding: 20px 0;
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.lab-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  border: 1px solid #edf2f7;
+  padding: 20px;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.lab-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+.lab-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.pending {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+
+/* Patient Grouping Styles */
+.patient-catalog-group {
+  margin-bottom: 40px;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #e2e8f0;
+}
+
+.patient-section-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3182ce;
+  padding-bottom: 10px;
+}
+
+.folder-icon {
+  font-size: 1.5rem;
+  color: #3182ce;
+}
+
+.patient-section-header h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.3rem;
+  text-transform: capitalize;
+}
+
+.count-badge {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Card Improvements */
+.lab-card {
+  background: white !important;
+  border-left: 5px solid #3182ce !important; /* Makes it look like a file tab */
+}
+
+.test-title {
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.category-tag {
+  font-size: 0.7rem;
+  background: #edf2f7;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.dashboard-hero {
+  background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+  color: white;
+  padding: 60px 0;
+  margin-bottom: 30px;
+}
+
+.order-id {
+  color: #718096;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.info-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+  align-items: flex-start;
+}
+
+.info-row .icon {
+  color: #4a5568;
+  margin-top: 3px;
+}
+
+.info-row label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #a0aec0;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.info-row p {
+  margin: 0;
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.upload-action-btn {
+  margin-top: auto;
+  width: 100%;
+  background: #2f855a;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.upload-action-btn:hover {
+  background: #276749;
+}

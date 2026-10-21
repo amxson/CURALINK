@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./styles/app.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
@@ -6,26 +6,23 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { Toaster } from "react-hot-toast";
-import { Protected, Public, Admin } from "./middleware/route";
+import { Protected, Admin, Technician} from "./middleware/route";
 import { lazy, Suspense } from "react";
 import Loading from "./components/Loading";
 import Dashboard from "./pages/Dashboard";
 import Chatbot from "./components/Chatbot";
-import PrivateRoute from "./components/PrivateRoute";
 
-const Aprofile = lazy(() => import("./components/Aprofile"));
 const Home = lazy(() => import("./pages/Home"));
 const Appointments = lazy(() => import("./pages/Appointments"));
 const Doctors = lazy(() => import("./pages/Doctors"));
 const Profile = lazy(() => import("./pages/Profile"));
+const LabDashboard = lazy(() => import("./pages/LabDashboard"));
 const Change = lazy(() => import("./pages/ChangePassword"));
-const DasHome = lazy(() => import("./components/Home"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const ApplyDoctor = lazy(() => import("./pages/ApplyDoctor"));
 const Error = lazy(() => import("./pages/Error"));
 
 const App: React.FC = () => {
-  const [userRole, setUserRole] = useState<string>("");
 
   return (
     <Router>
@@ -35,12 +32,13 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword/:id/:token" element={<ResetPassword />} />
+          <Route path="/dashboard/addstaff" element={<Admin><Dashboard type={"addstaff"} /></Admin>} />
           <Route
             path="/register"
             element={
-             
+
                 <Register />
-             
+
             }
           />
           <Route path="/" element={<Home />} />
@@ -77,6 +75,17 @@ const App: React.FC = () => {
               </Protected>
             }
           />
+
+          <Route
+  path="/lab-dashboard"
+  element={
+    <Protected>
+      <Technician>
+        <LabDashboard />
+      </Technician>
+    </Protected>
+  }
+/>
           <Route
             path="/ChangePassword"
             element={

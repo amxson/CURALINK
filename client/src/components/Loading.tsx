@@ -1,16 +1,16 @@
-// Loading.tsx
-import React from 'react';
-import "../styles/loading.css"; // Ensure this path is correct
+import { createPortal } from "react-dom";
+import "../styles/loading.css";
 
 const Loading: React.FC = () => {
-  return (
-    <div className="loading">
+  return createPortal(
+    <div className="loading-overlay">
       <div className="loader">
-        <div></div>
-        <div></div>
-        <div></div>
+        <span />
+        <span />
+        <span />
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

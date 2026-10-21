@@ -70,7 +70,7 @@ p {
 
 .btn {
   color: var(--white);
-  background-color: var(--dark-blue);
+  background-color: #2e384d;
   font-size: 1rem;
   padding: 0.6rem 0.8rem;
   border: none;
@@ -91,7 +91,7 @@ p {
 }
 
 .disabled:hover {
-  background-color: var(--dark-blue);
+  background-color: #2e384d;
 }
 
 .layout-container {

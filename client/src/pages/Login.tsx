@@ -2,24 +2,27 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/register.css";
 import Navbar from "../components/Navbar";
-import axios, { AxiosError } from "axios"; // Import AxiosError for error typing
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
-import {jwtDecode} from 'jwt-decode'; // Correct import for jwtDecode
+import jwtDecode from 'jwt-decode';
 import fetchData from "../helper/apiCall";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
+// Match these interfaces exactly to your Redux rootSlice
 interface UserRole {
   userId: string;
-  // Add other properties if needed
+  role: string;
 }
 
 interface UserInfo {
-  id: string;
+  _id: string;
   email: string;
-  // Add other properties if needed
+  role: string;
+  firstname?: string;
+  lastname?: string;
 }
 
 function Login() {
@@ -27,7 +30,7 @@ function Login() {
   const [formDetails, setFormDetails] = useState({
     email: "",
     password: "",
-    role: "", 
+    role: "",
   });
   const navigate = useNavigate();
 
@@ -42,17 +45,15 @@ function Login() {
   const formSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { email, password, role } = formDetails;
-  
+
     if (!email || !password) {
       return toast.error("Email and password are required");
     } else if (!role) {
       return toast.error("Please select a role");
-    } else if (role !== "Admin" && role !== "Doctor" && role !== "Patient") {
-      return toast.error("Please select a valid role");
     } else if (password.length < 5) {
       return toast.error("Password must be at least 5 characters long");
     }
-  
+
     try {
       const { data } = await toast.promise(
         axios.post("/api/user/login", {
@@ -66,15 +67,23 @@ function Login() {
           error: "Unable to login user",
         }
       );
-  
+
       localStorage.setItem("token", data.token);
-      const decodedToken = jwtDecode<UserRole>(data.token);
-      dispatch(setUserInfo({ id: decodedToken.userId, email }));
-      getUser(decodedToken.userId, role);
+
+      // Decode token to get the userId and role stored in JWT
+      const decodedToken = jwtDecode<any>(data.token);
+
+      dispatch(setUserInfo({
+        _id: decodedToken.userId, // Use userId from your payload
+        email: email,
+        role: decodedToken.role
+      }));
+
+      getUser(decodedToken.userId, decodedToken.role);
     } catch (error) {
-      const axiosError = error as AxiosError; // Casting error to AxiosError
+      const axiosError = error as AxiosError;
       if (axiosError?.response?.status === 400) {
-        toast.error(axiosError.response?.data as string); // Display specific backend error
+        toast.error(axiosError.response?.data as string);
       } else {
         console.error("Login error:", error);
         toast.error("Login failed");
@@ -84,10 +93,25 @@ function Login() {
 
   const getUser = async (id: string, role: string) => {
     try {
-      const temp = await fetchData(`/api/user/getuser/${id}`) as UserInfo;
-      dispatch(setUserInfo(temp));
+      // Fetch full user object from backend
+      const temp = await fetchData(`/api/user/getuser/${id}`) as any;
+
+      // Build a complete UserInfo object to satisfy TypeScript and Redux
+      const completeUserInfo: UserInfo = {
+        _id: temp._id || temp.id || id,
+        email: temp.email || formDetails.email,
+        role: temp.role || role,
+        firstname: temp.firstname,
+        lastname: temp.lastname
+      };
+
+      dispatch(setUserInfo(completeUserInfo));
+
+      // Navigation Logic
       if (role === "Admin") {
         navigate("/dashboard/home");
+      } else if (role === "Technician") {
+        navigate("/lab-dashboard");
       } else {
         navigate("/");
       }
@@ -130,6 +154,7 @@ function Login() {
               <option value="Admin">Admin</option>
               <option value="Doctor">Doctor</option>
               <option value="Patient">Patient</option>
+              <option value="Technician">Lab Technician</option>
             </select>
             <button type="submit" className="btn form-btn">
               Log In

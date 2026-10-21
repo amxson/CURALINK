@@ -1,0 +1,136 @@
+.message-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.message-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.message-card:hover {
+  transform: translateY(-5px);
+}
+
+.message-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #f8f9fc;
+  padding-bottom: 1rem;
+}
+
+.sender-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.sender-avatar {
+  width: 45px;
+  height: 45px;
+  background: #4e73df;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.sender-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #2e384d;
+}
+
+.sender-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #858796;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.message-date {
+  font-size: 0.75rem;
+  color: #b7b9cc;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.message-body {
+  flex-grow: 1;
+  position: relative;
+  background: #f8f9fc;
+  padding: 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.quote-icon {
+  color: #e3e6f0;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.message-body p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #4e5e7a;
+}
+
+.message-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-btn.reply {
+  text-decoration: none;
+  background: #1cc88a;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+
+.action-btn.reply:hover {
+  background: #17a673;
+}
+
+.action-btn.delete-text {
+  background: transparent;
+  border: none;
+  color: #e74a3b;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+}
+
+.action-btn.delete-text:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+  .message-grid { grid-template-columns: 1fr; }
+}

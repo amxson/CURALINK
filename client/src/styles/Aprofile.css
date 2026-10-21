@@ -1,0 +1,125 @@
+.profile-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2.5rem;
+}
+
+.profile-sidebar {
+  text-align: center;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 1.5rem;
+}
+
+.large-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f8f9fc;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.camera-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #4e73df;
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.camera-btn:hover { background: #2e59d9; }
+
+.user-full-name { font-size: 1.4rem; color: #2e384d; margin-bottom: 0.5rem; }
+
+.role-badge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sidebar-info {
+  margin-top: 2rem;
+  text-align: left;
+  border-top: 1px solid #f8f9fc;
+  padding-top: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  color: #4e73df;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f8f9fc;
+  padding-bottom: 0.5rem;
+}
+
+.input-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #858796;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-group input, .input-group select, .input-group textarea {
+  padding: 10px 15px;
+  border: 1px solid #e3e6f0;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.update-btn {
+  background: #4e73df;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+  transition: 0.3s;
+}
+
+.update-btn:hover { background: #2e59d9; }
+
+@media (max-width: 900px) {
+  .profile-grid { grid-template-columns: 1fr; }
+}

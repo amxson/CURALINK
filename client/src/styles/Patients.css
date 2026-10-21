@@ -1,0 +1,318 @@
+/* ==========================================================================
+   1. SHARED DASHBOARD LAYOUT
+   ========================================================================== */
+.patients-page {
+  padding: 2rem;
+  background-color: #f8f9fc;
+  min-height: 100vh;
+  flex: 2;
+}
+
+.patients-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.header-left h1 {
+  font-size: 1.75rem;
+  color: #2e384d;
+  margin-bottom: 5px;
+}
+
+.header-left p {
+  color: #858796;
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   2. STATS & ANALYTICS CARDS
+   ========================================================================== */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+/* Color Themes for Icons */
+.stat-icon.purple { background: #f3e8ff; color: #7c3aed; }
+.stat-icon.green  { background: #dcfce7; color: #16a34a; }
+.stat-icon.blue   { background: #dbeafe; color: #2563eb; }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   3. SEARCH & FILTER CONTROLS
+   ========================================================================== */
+.filter-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.search-wrapper {
+  flex-grow: 1;
+  position: relative;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  outline: none;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.search-wrapper input:focus {
+  border-color: #4e73df;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9fc;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+
+.filter-wrapper select {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #4e5e7a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   4. MODERN DATA TABLES
+   ========================================================================== */
+.table-container {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table th {
+  background: #fdfdff;
+  padding: 18px 15px;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #858796;
+  border-bottom: 2px solid #f8f9fc;
+}
+
+.modern-table td {
+  padding: 15px;
+  border-bottom: 1px solid #f8f9fc;
+  vertical-align: middle;
+  color: #4e5e7a;
+}
+
+.patient-row:hover {
+  background-color: #fcfdfe;
+}
+
+/* Profile Cell */
+.patient-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.patient-name {
+  display: block;
+  font-weight: 600;
+  color: #2e384d;
+  font-size: 0.95rem;
+}
+
+.patient-id, .id-badge {
+  font-size: 0.75rem;
+  color: #b7b9cc;
+  font-family: 'Monaco', monospace;
+  background: #f8f9fc;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   5. BADGES & TAGS
+   ========================================================================== */
+.age-badge {
+  background: #eaecf4;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4e73df;
+  display: inline-block;
+}
+
+.gender-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 5px 15px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gender-tag.male { background: #e3f2fd; color: #1976d2; }
+.gender-tag.female { background: #fce4ec; color: #d81b60; }
+
+.pending-tag {
+  background: #fff9db;
+  color: #f08c00;
+  border: 1px solid #ffe066;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. ACTION BUTTONS
+   ========================================================================== */
+.action-button-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.action-btn, .delete-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+}
+
+.action-btn.accept { background: #e8f5e9; color: #2e7d32; }
+.action-btn.accept:hover { background: #2e7d32; color: white; transform: scale(1.1); }
+
+.action-btn.reject, .delete-action-btn { background: #fff5f5; color: #e74a3b; }
+.action-btn.reject:hover, .delete-action-btn:hover { background: #e74a3b; color: white; transform: scale(1.1); }
+
+.complete-btn {
+  background: #4e73df;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.complete-btn:hover:not(:disabled) {
+  background: #2e59d9;
+  box-shadow: 0 4px 10px rgba(78, 115, 223, 0.3);
+}
+
+.complete-btn:disabled {
+  background: #1cc88a;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   7. UTILITIES
+   ========================================================================== */
+.text-center { text-align: center; }
+.shadow-card { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.info-item svg {
+  color: #4e73df;
+}

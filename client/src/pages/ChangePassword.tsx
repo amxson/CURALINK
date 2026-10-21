@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "../styles/profile.css";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -8,11 +8,10 @@ import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import fetchData from "../helper/apiCall";
-import { jwtDecode } from 'jwt-decode';
+import jwtDecode from "jwt-decode";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
-// Define the type for user data
 interface User {
   pic: string;
   newpassword: string | null;
@@ -40,10 +39,10 @@ function ChangePassword() {
     confnewpassword: "",
   });
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     try {
       dispatch(setLoading(true));
-      const temp = await fetchData(`api/user/getuser/${userId}`) as User;
+      const temp = (await fetchData(`api/user/getuser/${userId}`)) as User;
       setFormDetails({
         password: "",
         newpassword: temp.newpassword === null ? "" : temp.newpassword,
@@ -53,19 +52,17 @@ function ChangePassword() {
       dispatch(setLoading(false));
     } catch (error) {
       console.error("Error fetching user data:", error);
+      dispatch(setLoading(false));
     }
-  };
+  }, [dispatch, userId]); // ✅ stable reference
 
   useEffect(() => {
     getUser();
-  }, [dispatch, userId]);
+  }, [getUser]); // ✅ useCallback ensures no ESLint warning
 
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormDetails({
-      ...formDetails,
-      [name]: value,
-    });
+    setFormDetails({ ...formDetails, [name]: value });
   };
 
   const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,7 +77,7 @@ function ChangePassword() {
       const response = await axios.put(
         "/api/user/changepassword",
         {
-          userId: userId,
+          userId,
           currentPassword: password,
           newPassword: newpassword,
           confirmNewPassword: confnewpassword,
@@ -94,17 +91,12 @@ function ChangePassword() {
 
       if (response.data === "Password changed successfully") {
         toast.success("Password updated successfully");
-        setFormDetails({
-          password: "",
-          newpassword: "",
-          confnewpassword: "",
-        });
+        setFormDetails({ password: "", newpassword: "", confnewpassword: "" });
       } else {
         toast.error("Unable to update password");
       }
     } catch (error: unknown) {
       console.error("Error updating password:", error);
-
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data);
       } else {

@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
-import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { FaUserMd, FaCheck, FaTimes, FaBriefcase, FaMoneyBillWave, FaEnvelope } from "react-icons/fa";
+import Loading from "./Loading";
 import Empty from "./Empty";
+import { setLoading } from "../redux/reducers/rootSlice";
 import fetchData from "../helper/apiCall";
-import "../styles/user.css";
-
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+import "../styles/Patients.css"; // Reuse your shared high-quality styles
 
 interface Application {
   _id: string;
@@ -26,9 +25,7 @@ interface Application {
 }
 
 interface RootState {
-  root: {
-    loading: boolean;
-  };
+  root: { loading: boolean };
 }
 
 const AdminApplications: React.FC = () => {
@@ -36,147 +33,151 @@ const AdminApplications: React.FC = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.root);
 
-  const getAllApp = async () => {
+  // ✅ FIXED: Wrapped in useCallback to prevent infinite loading loop
+  const getAllApp = useCallback(async () => {
     try {
       dispatch(setLoading(true));
-      const temp = await fetchData<Application[]>("/api/doctor/getnotdoctors");
-      setApplications(temp);
-      dispatch(setLoading(false));
+      const response: any = await fetchData("/api/doctor/getnotdoctors");
+
+      // Safety check for data format
+      const appArray = Array.isArray(response) ? response : (response.applications || []);
+      setApplications(appArray);
     } catch (error) {
       console.error("Error fetching applications", error);
+      toast.error("Failed to load applications");
+    } finally {
+      dispatch(setLoading(false));
     }
-  };
-
-  const acceptUser = async (userId: string) => {
-    try {
-      const confirm = window.confirm("Are you sure you want to accept?");
-      if (confirm) {
-        await toast.promise(
-          axios.put(
-            "/api/doctor/acceptdoctor",
-            { id: userId },
-            {
-              headers: {
-                authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          ),
-          {
-            success: "Application accepted",
-            error: "Unable to accept application",
-            loading: "Accepting application...",
-          }
-        );
-        getAllApp();
-      }
-    } catch (error) {
-      console.error("Error accepting user", error);
-    }
-  };
-
-  const deleteUser = async (userId: string) => {
-    try {
-      const confirm = window.confirm("Are you sure you want to delete?");
-      if (confirm) {
-        await toast.promise(
-          axios.put(
-            "/api/doctor/rejectdoctor",
-            { id: userId },
-            {
-              headers: {
-                authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          ),
-          {
-            success: "Application rejected",
-            error: "Unable to reject application",
-            loading: "Rejecting application...",
-          }
-        );
-        getAllApp();
-      }
-    } catch (error) {
-      console.error("Error deleting user", error);
-    }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     getAllApp();
-  }, []);
+  }, [getAllApp]);
+
+  const acceptUser = async (userId: string) => {
+    if (!window.confirm("Approve this doctor for clinical practice?")) return;
+
+    try {
+      await toast.promise(
+        axios.put(
+          "/api/doctor/acceptdoctor",
+          { id: userId },
+          { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } }
+        ),
+        {
+          success: "Doctor profile activated!",
+          error: "Unable to accept application",
+          loading: "Processing approval...",
+        }
+      );
+      getAllApp();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const rejectUser = async (userId: string) => {
+    if (!window.confirm("Reject and remove this application?")) return;
+
+    try {
+      await toast.promise(
+        axios.put(
+          "/api/doctor/rejectdoctor",
+          { id: userId },
+          { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } }
+        ),
+        {
+          success: "Application rejected",
+          error: "Unable to reject application",
+          loading: "Processing rejection...",
+        }
+      );
+      getAllApp();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <>
+    <section className="patients-page">
+      <div className="patients-header">
+        <div className="header-left">
+          <h1>Doctor Applications</h1>
+          <p>Review and verify new specialist registrations</p>
+        </div>
+        <div className="header-actions">
+           <div className="stats-mini-badge">
+             Pending Requests: <strong>{applications.length}</strong>
+           </div>
+        </div>
+      </div>
+
       {loading ? (
         <Loading />
-      ) : (
-        <section className="user-section">
-          <h3 className="home-sub-heading">All Applications</h3>
-          {applications.length > 0 ? (
-            <div className="user-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Pic</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Mobile No.</th>
-                    <th>Experience</th>
-                    <th>Specialization</th>
-                    <th>Fees</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {applications.map((ele, i) => (
-                    <tr key={ele._id}>
-                      <td>{i + 1}</td>
-                      <td>
+      ) : applications.length > 0 ? (
+        <div className="table-container shadow-card">
+          <table className="modern-table">
+            <thead>
+              <tr>
+                <th>Applicant</th>
+                <th>Expertise</th>
+                <th>Experience</th>
+                <th>Desired Fee</th>
+                <th className="text-center">Verification</th>
+              </tr>
+            </thead>
+            <tbody>
+              {applications.map((ele) => (
+                <tr key={ele._id} className="patient-row">
+                  <td>
+                    <div className="patient-profile">
                       <img
-                          className="user-table-pic"
-                          src={
-                            ele.userId.pic ||
-                            "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-                          }
-                          alt={`Profile picture of ${ele.userId.firstname} ${ele.userId.lastname || ''}`}
-                          // Includes the last name if available, otherwise just the first name
-                        />
-
-                      </td>
-                      <td>{ele.userId.firstname}</td>
-                      <td>{ele.userId.lastname}</td>
-                      <td>{ele.userId.email}</td>
-                      <td>{ele.userId.mobile}</td>
-                      <td>{ele.experience}</td>
-                      <td>{ele.specialization}</td>
-                      <td>{ele.fees}</td>
-                      <td className="select">
-                        <button
-                          className="btn user-btn accept-btn"
-                          onClick={() => acceptUser(ele.userId._id)}
-                        >
-                          Accept
-                        </button>
-                        <button
-                          className="btn user-btn"
-                          onClick={() => deleteUser(ele.userId._id)}
-                        >
-                          Reject
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <Empty message="No applications found." />
-          )}
-        </section>
+                        src={ele.userId.pic || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+                        alt="Applicant"
+                        className="avatar"
+                      />
+                      <div>
+                        <span className="patient-name">Dr. {ele.userId.firstname} {ele.userId.lastname}</span>
+                        <span className="patient-id"><FaEnvelope /> {ele.userId.email}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="gender-tag pending-tag">{ele.specialization}</span>
+                  </td>
+                  <td>
+                    <div className="info-item"><FaBriefcase style={{color: '#4e73df'}} /> {ele.experience} Years</div>
+                  </td>
+                  <td>
+                    <div className="info-item"><FaMoneyBillWave style={{color: '#1cc88a'}} /> ${ele.fees}</div>
+                  </td>
+                  <td className="text-center">
+                    <div className="action-button-group">
+                      <button
+                        className="action-btn accept"
+                        title="Accept"
+                        onClick={() => acceptUser(ele.userId._id)}
+                      >
+                        <FaCheck />
+                      </button>
+                      <button
+                        className="action-btn reject"
+                        title="Reject"
+                        onClick={() => rejectUser(ele.userId._id)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <Empty message="No pending applications at the moment." />
       )}
-    </>
+    </section>
   );
 };
 

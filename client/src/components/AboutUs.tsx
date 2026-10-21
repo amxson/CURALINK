@@ -10,8 +10,7 @@ const AboutUs: React.FC = () => {
         <div className="about-content">
           <div className="about-image-container">
             <img
-              src={image}
-              alt="Image of a healthcare professional providing service or consultation"
+              src={image} alt="About us illustration"
               className="about-shaking-image"
             />
           </div>

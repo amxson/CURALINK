@@ -4,12 +4,13 @@ import AdminAppointments from "../components/AdminAppointments";
 import AdminDoctors from "../components/AdminDoctors";
 import Sidebar from "../components/Sidebar";
 import Patients from "../components/Patients"; // Updated import
+import AddStaff from "../components/AddStaff"; // Import the new form
 import Home from "../components/Home";
 import Aprofile from "../components/Aprofile";
 import ContactMessages from "../components/ContactMessages"; // Import the new component
 
 interface DashboardProps {
-  type: "home" | "patients" | "doctors" | "applications" | "appointments" | "aprofile" | "contactMessages";
+  type: "home" | "addstaff" | "patients" | "doctors" | "applications" | "appointments" | "aprofile" | "contactMessages";
 }
 
 const Dashboard: React.FC<DashboardProps> = (props) => {
@@ -21,6 +22,9 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
         <div className="layout-container">
           <Sidebar />
           {
+            type === "addstaff" ? (
+    <AddStaff />
+  ) :
             type === "home" ? (
               <Home />
             ) : type === "patients" ? ( // Updated condition
@@ -29,7 +33,8 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
               <AdminDoctors />
             ) : type === "applications" ? (
               <AdminApplications />
-            ) : type === "appointments" ? (
+            )
+            : type === "appointments" ? (
               <AdminAppointments />
             ) : type === "aprofile" ? (
               <Aprofile />

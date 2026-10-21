@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "../styles/profile.css";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -8,7 +8,7 @@ import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import fetchData from "../helper/apiCall";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { RootState } from "../redux/store";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
@@ -37,7 +37,9 @@ interface FormDetails {
 }
 
 const Profile: React.FC = () => {
-  const { userId } = jwtDecode<{ userId: string }>(localStorage.getItem("token")!);
+  const { userId } = jwtDecode<{ userId: string }>(
+    localStorage.getItem("token")!
+  );
   const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.root);
   const [file, setFile] = useState<string>("");
@@ -53,7 +55,8 @@ const Profile: React.FC = () => {
     confpassword: "",
   });
 
-  const getUser = async () => {
+  // ✅ Wrap getUser in useCallback
+  const getUser = useCallback(async () => {
     try {
       dispatch(setLoading(true));
       const temp = await fetchData<User>(`api/user/getuser/${userId}`);
@@ -71,13 +74,15 @@ const Profile: React.FC = () => {
       toast.error("Failed to fetch user data.");
       dispatch(setLoading(false));
     }
-  };
+  }, [dispatch, userId]); // ✅ stable reference
 
   useEffect(() => {
     getUser();
-  }, [dispatch, userId]);
+  }, [getUser]); // ✅ no ESLint warning now
 
-  const inputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const inputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormDetails({
       ...formDetails,
@@ -88,8 +93,8 @@ const Profile: React.FC = () => {
   const validateForm = () => {
     const { email, mobile, age, password, confpassword } = formDetails;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const mobileRegex = /^\d{10,14}$/; // Assumes a phone number of 10 to 14 digits
-    const ageRegex = /^(?:1[89]|[2-9]\d)$/; // Assumes age range from 18 to 99
+    const mobileRegex = /^\d{10,14}$/;
+    const ageRegex = /^(?:1[89]|[2-9]\d)$/;
 
     if (!email || !emailRegex.test(email)) {
       return toast.error("Please enter a valid email address.");
@@ -124,16 +129,7 @@ const Profile: React.FC = () => {
       await toast.promise(
         axios.put(
           "/api/user/updateprofile",
-          {
-            firstname,
-            lastname,
-            age,
-            mobile,
-            address,
-            gender,
-            email,
-            password,
-          },
+          { firstname, lastname, age, mobile, address, gender, email, password },
           {
             headers: {
               authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -163,15 +159,8 @@ const Profile: React.FC = () => {
         <section className="register-section flex-center">
           <div className="profile-container flex-center">
             <h2 className="form-heading">Profile</h2>
-            <img
-              src={file}
-              alt="profile"
-              className="profile-pic"
-            />
-            <form
-              onSubmit={formSubmit}
-              className="register-form"
-            >
+            <img src={file} alt="profile" className="profile-pic" />
+            <form onSubmit={formSubmit} className="register-form">
               <div className="form-same-row">
                 <input
                   type="text"
@@ -203,7 +192,6 @@ const Profile: React.FC = () => {
                   name="gender"
                   value={formDetails.gender}
                   className="form-input"
-                  id="gender"
                   onChange={inputChange}
                 >
                   <option value="neither">Prefer not to say</option>
@@ -255,10 +243,7 @@ const Profile: React.FC = () => {
                   onChange={inputChange}
                 />
               </div>
-              <button
-                type="submit"
-                className="btn form-btn"
-              >
+              <button type="submit" className="btn form-btn">
                 Update
               </button>
             </form>

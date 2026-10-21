@@ -1,95 +1,387 @@
-@import url(app.css);
-
-/* Ensure the body and html take full height */
-html, body {
-  height: 100%;
-  margin: 0;
+/* --- LAYOUT & HEADER --- */
+.content {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 40px 0;
+  min-height: 100vh;
 }
 
-/* Wrapper for content and footer */
-.wrapper {
+.action-center-header {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.page-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0f172a !important;
+  margin-bottom: 5px;
+}
+
+.sub-heading {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* --- THE GRID --- */
+.two-column-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.column-box {
+  min-height: 75vh;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Full viewport height */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
 }
 
-/* Content takes up remaining space */
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
-/* Footer */
-footer {
-  background-color: #f1f1f1;
-  text-align: center;
-  padding: 1rem;
-  width: 100%;
-}
-
-/* Notif Section */
-.notif-section {
-  padding: 1rem; /* Adjust padding */
-  box-sizing: border-box; /* Ensure padding is included in height */
-  flex: 1;
-}
-
-/* Other styles */
-.disable-btn {
-  cursor: no-drop;
-}
-
-.disable-btn:hover {
-  background-color: rgba(0, 128, 0, 0.528) !important;
-}
-
-.pagination {
+.column-header {
   display: flex;
-  gap: 9px; 
-  justify-content: center; 
-  margin-top: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
-.pagination button {
-  padding: 8px 12px;
-  background-color: #e2dddd;
-  border: 1px solid #acabab;
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.medical { background: #e0f2fe; color: #0369a1; }
+.alert { background: #f1f5f9; color: #475569; }
+
+.column-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.count-pill {
+  background: #1e293a;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* --- DOCTOR-SPECIFIC UNIQUE SECTION --- */
+.doctor-grouped-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 200px;
+}
+
+.patient-group-wrapper {
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 18px;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+}
+
+.patient-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #3b82f6;
+}
+
+.patient-reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.doc-view-card {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+  margin-bottom: 0;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Status Pills */
+.status-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.status-pill.ready { background: #dcfce7; color: #166534; }
+.status-pill.pending { background: #fef9c3; color: #854d0e; }
+.status-pill.in-progress { background: #dbeafe; color: #1e40af; }
+
+/* --- CAROUSEL STRUCTURE (Patient Lab & Prescriptions) --- */
+.carousel-wrapper {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.carousel-wrapper::-webkit-scrollbar { display: none; }
+
+.carousel-card {
+  min-width: 320px;
+  max-width: 320px;
+  scroll-snap-align: start;
+  margin-bottom: 0;
+}
+
+.carousel-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #0f172a;
+}
+
+.nav-arrow:hover {
+  background: #0f172a;
+  color: white;
+}
+
+/* --- CARDS & LISTS --- */
+.list-env {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.glass-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.item-name {
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+/* --- ALERTS --- */
+.alert-card {
+  gap: 15px;
+  border-left: 4px solid #3b82f6;
+  display: flex;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.alert-indicator {
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+}
+
+.item-content {
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.item-date {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* --- TRACKER UI --- */
+.tracker-card {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tracker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 5px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.tracker-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+}
+
+.node-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.node-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.node-connector {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 -10px 15px -10px;
+}
+
+.tracker-node.active .node-dot {
+  background: #3b82f6;
+  color: white;
+}
+
+.tracker-node.active .node-label {
+  color: #1e40af;
+}
+
+.node-connector.active {
+  background: #3b82f6;
+}
+
+/* --- PRESCRIPTION CARD (PATIENT) --- */
+.presc-card {
+  position: relative;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 20px;
+  border-left: 4px solid #a855f7;
+  background: linear-gradient(to bottom right, #ffffff, #fafaff);
+}
+
+.presc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.dr-name { font-size: 1rem; font-weight: 700; color: #1e293b; }
+
+.med-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 6px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.med-bullet { width: 6px; height: 6px; background: #a855f7; border-radius: 50%; }
+
+.view-details-link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #a855f7;
+  background: none;
+  border: none;
   cursor: pointer;
 }
 
-.pagination button:hover {
-  background-color: #28d33f;
+/* --- PAGINATION --- */
+.modern-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .notif-section {
-    padding: 0.5rem;
-  }
-
-  table {
-    font-size: 0.9rem; /* Slightly smaller text for smaller screens */
-    width: 100%; /* Ensure table takes full width */
-    overflow-x: auto; /* Enable horizontal scroll if needed */
-    display: block;
-  }
-
-  th, td {
-    padding: 0.5rem; /* Adjust padding for smaller screens */
-  }
-
-  .pagination {
-    flex-direction: column; /* Stack pagination buttons vertically */
-    gap: 5px;
-  }
+.modern-pagination button {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
 }
 
-@media (max-width: 576px) {
-  table {
-    font-size: 0.8rem; /* Further reduce text size for very small screens */
-  }
+.modern-pagination button.active {
+  background: #0f172a;
+  color: white;
+  border-color: #0f172a;
+}
 
-  .pagination {
-    margin-top: 1rem;
-  }
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .two-column-layout { grid-template-columns: 1fr; }
+  .column-box { height: auto; min-height: 500px; overflow-y: auto; }
 }

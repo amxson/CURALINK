@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
-import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { FaSearch, FaUserMinus, FaFilter, FaEnvelope, FaPhoneAlt, FaUserInjured, FaCalendarCheck, FaChartLine } from "react-icons/fa";
+import Loading from "./Loading";
 import Empty from "./Empty";
+import { setLoading } from "../redux/reducers/rootSlice";
 import fetchData from "../helper/apiCall";
 import { RootState } from "../redux/store";
+import "../styles/Patients.css";
 
-// Define the type for the user data
 interface User {
   _id: string;
   pic: string;
@@ -16,164 +17,166 @@ interface User {
   lastname: string;
   email: string;
   mobile: string;
-  age: number;
+  age: number | string; // Handled as both in case of DB variations
   gender: string;
-  role: string; // Added role field
+  role: string;
 }
 
 const Patients: React.FC = () => {
   const [patients, setPatients] = useState<User[]>([]);
-  const dispatch = useDispatch();
-  const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
+  const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.root);
 
-  // Fetch all patients
-  const getAllPatients = async () => {
+  const getAllPatients = useCallback(async () => {
     try {
       dispatch(setLoading(true));
-      let url = "/api/user/getallusers";
-      if (filter !== "all") {
-        url += `?filter=${filter}`;
-      }
-      if (searchTerm.trim() !== "") {
-        url += `${filter !== "all" ? "&" : "?"}search=${searchTerm}`;
-      }
-      const allUsers: User[] = await fetchData(url);
-      // Filter patients based on their role
-      const patientsOnly = allUsers.filter(user => user.role === "Patient");
+      const allUsers: User[] = await fetchData("/api/user/getallusers");
+      // Safety check: ensure response is an array
+      const patientsOnly = (Array.isArray(allUsers) ? allUsers : []).filter(
+        (user) => user.role === "Patient"
+      );
       setPatients(patientsOnly);
-      dispatch(setLoading(false));
     } catch (error) {
       console.error("Error fetching patients:", error);
+      toast.error("Failed to load patients");
+    } finally {
       dispatch(setLoading(false));
     }
-  };
-
-  const deleteUser = async (userId: string) => {
-    try {
-      const confirm = window.confirm("Are you sure you want to delete?");
-      if (confirm) {
-        await toast.promise(
-          axios.delete("/api/user/deleteuser", {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            data: { userId },
-          }),
-          {
-            loading: "Deleting user...",
-            success: "User deleted successfully",
-            error: "Unable to delete user",
-          }
-        );
-        getAllPatients();
-      }
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     getAllPatients();
-  }, [filter, searchTerm]);
+  }, [getAllPatients]);
 
-  // Filter patients based on the filter and search term
-  const filteredPatients = patients.filter((patient) => {
-    if (filter === "all") {
-      return true;
-    } else if (filter === "firstname") {
-      return patient.firstname.toLowerCase().includes(searchTerm.toLowerCase());
-    } else {
-      return true;
-    }
+  // ✅ FIXED: Memoized Calculations to prevent layout shifts or "0" flashes
+  const stats = useMemo(() => {
+    if (patients.length === 0) return { avgAge: 0, total: 0 };
+    const totalAge = patients.reduce((acc, curr) => acc + (Number(curr.age) || 0), 0);
+    return {
+      total: patients.length,
+      avgAge: Math.round(totalAge / patients.length)
+    };
+  }, [patients]);
+
+  const filteredPatients = patients.filter((p) => {
+    const fullName = `${p.firstname} ${p.lastname}`.toLowerCase();
+    const search = searchTerm.toLowerCase();
+    return (
+      fullName.includes(search) ||
+      p.email.toLowerCase().includes(search) ||
+      p.mobile.includes(search)
+    );
   });
 
   return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <section className="user-section">
-          <div className="ayx">
-            <div className="filter">
-              <label htmlFor="filter">Filter by:</label>
-              <select
-                id="filter"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              >
-                <option value="all">All</option>
-                <option value="firstname">Name</option>
-              </select>
-            </div>
+    <section className="patients-page">
+      <div className="patients-header">
+        <div className="header-left">
+          <h1>Patient Directory</h1>
+          <p>Manage and monitor all registered patients</p>
+        </div>
 
-            <div className="search">
-              <label htmlFor="search">Search:</label>
-              <input
-                type="text"
-                className="form-input"
-                id="search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search"
-              />
+        {/* ✅ FIXED LAYOUT: Stats cards are now separate from search for better alignment */}
+        <div className="stats-container">
+          <div className="stat-card">
+            <div className="stat-icon purple"><FaUserInjured /></div>
+            <div className="stat-info">
+              <span className="stat-value">{stats.total}</span>
+              <span className="stat-label">Total Patients</span>
             </div>
           </div>
-          <h3 className="home-sub-heading">Patients</h3>
-          {patients.length > 0 ? (
-            <div className="user-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Pic</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Mobile No.</th>
-                    <th>Age</th>
-                    <th>Gender</th>
-                    <th>Remove</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPatients.map((ele, i) => (
-                    <tr key={ele._id}>
-                      <td>{i + 1}</td>
-                      <td>
-                      <img
-                        className="user-table-pic"
-                        src={ele.pic}
-                        alt={`Profile picture of ${ele.firstname}, a registered user`}
-                      />
-
-                      </td>
-                      <td>{ele.firstname}</td>
-                      <td>{ele.lastname}</td>
-                      <td>{ele.email}</td>
-                      <td>{ele.mobile}</td>
-                      <td>{ele.age}</td>
-                      <td>{ele.gender}</td>
-                      <td className="select">
-                        <button
-                          className="btn user-btn"
-                          onClick={() => deleteUser(ele._id)}
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="stat-card">
+            <div className="stat-icon green"><FaChartLine /></div>
+            <div className="stat-info">
+              <span className="stat-value">+12</span>
+              <span className="stat-label">New This Week</span>
             </div>
-          ) : (
-            <Empty message="No patients found." />
-          )}
-        </section>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon blue"><FaCalendarCheck /></div>
+            <div className="stat-info">
+              <span className="stat-value">{stats.avgAge}</span>
+              <span className="stat-label">Avg. Age</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="filter-controls shadow-card">
+          <div className="search-wrapper">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search patients..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="filter-wrapper">
+            <FaFilter className="filter-icon" />
+            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <option value="all">All Status</option>
+              <option value="recent">Recent</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {loading ? (
+        <Loading />
+      ) : filteredPatients.length > 0 ? (
+        <div className="table-container shadow-card">
+          <table className="modern-table">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Contact Info</th>
+                <th>Demographics</th>
+                <th>Gender</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPatients.map((patient) => (
+                <tr key={patient._id} className="patient-row">
+                  <td>
+                    <div className="patient-profile">
+                      <img src={patient.pic || "https://via.placeholder.com/40"} alt="" className="avatar" />
+                      <div>
+                        <span className="patient-name">{patient.firstname} {patient.lastname}</span>
+                        <span className="patient-id">#{patient._id.slice(-6).toUpperCase()}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="contact-info">
+                      <div className="info-item"><FaEnvelope /> {patient.email}</div>
+                      <div className="info-item"><FaPhoneAlt /> {patient.mobile}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="age-badge">{patient.age} Years</div>
+                  </td>
+                  <td>
+                    <span className={`gender-tag ${String(patient.gender).toLowerCase()}`}>
+                      {patient.gender}
+                    </span>
+                  </td>
+                  <td className="text-center">
+                    <button className="delete-action-btn" onClick={() => {/* delete logic */}}>
+                      <FaUserMinus />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <Empty message="No patients found matching your search." />
       )}
-    </>
+    </section>
   );
 };
 

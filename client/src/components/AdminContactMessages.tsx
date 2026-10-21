@@ -32,7 +32,7 @@ const AdminContactMessages: React.FC = () => {
       <ul>
         {messages.map((message) => (
           <li key={message._id}>
-            <p><strong>Name:</strong> {message.name}</p>
+            <p><strong>Names:</strong> {message.name}</p>
             <p><strong>Email:</strong> {message.email}</p>
             <p><strong>Message:</strong> {message.message}</p>
             <p><strong>Date:</strong> {new Date(message.date).toLocaleString()}</p>

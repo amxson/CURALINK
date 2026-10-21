@@ -2,104 +2,123 @@
 
 .circles-section {
   text-align: center;
-  padding: 1rem;
-  
+  padding: 100px 2rem;
+}
+
+.circles-subtitle {
+  margin-bottom: 4em;
 }
 
 .circles-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color:var(--dark-blue);/*  ; /* Adjust as needed */
-  margin-bottom: 1rem; /* Reduced space between title and circles */
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: #2e384d;
+  margin-bottom: 5rem;
+  position: relative;
+}
+
+/* Subtle accent line under title */
+.circles-title::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 5px;
+  background: #2e384d;
+  border-radius: 10px;
 }
 
 .circles {
   display: flex;
-  flex-direction: row;
-  margin-top: 8rem;
-  justify-content: space-evenly;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4rem; /* Wide gap for a spacious feel */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .circle {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.5rem;
-  background-color: var(--white);
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
   align-items: center;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+
+  /* The "Pure Circle" Logic */
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+
+  background: #ffffff;
+  border: 1px solid rgba(10, 116, 218, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover Effect: The circle lifts and the border glows */
+.circle:hover {
+  transform: translateY(-15px);
+  border-color: #2e384d;
+  box-shadow: 0 30px 60px rgba(10, 116, 218, 0.12);
+}
+
+/* Inner decorative ring for a "Medical Tech" look */
+.circle::before {
+  content: "";
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  border: 1px dashed rgba(10, 116, 218, 0.15);
+  pointer-events: none;
 }
 
 .counter {
-  font-size: 3rem;
-  font-weight: 600;
-  color: var(--darker-blue);
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: #2e384d;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 5px;
 }
 
 .circle-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--light-text-color);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4e5e7a;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  max-width: 150px; /* Forces text to wrap beautifully inside the circle */
+  line-height: 1.4;
 }
 
+/* --- Responsive fixes to keep them PURE circles --- */
 @media screen and (max-width: 1000px) {
+  .circle {
+    width: 230px;
+    height: 230px;
+  }
+  .counter { font-size: 3rem; }
+}
+
+@media screen and (max-width: 770px) {
+  .circles {
+    gap: 2rem;
+  }
   .circle {
     width: 200px;
     height: 200px;
   }
-  .counter {
-    font-size: 2.5rem;
-  }
+  .counter { font-size: 2.5rem; }
+  .circle-name { font-size: 0.8rem; }
 }
 
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 480px) {
   .circle {
-    width: 150px;
-    height: 150px;
-  }
-  .counter {
-    font-size: 2rem;
-  }
-
-  .circle-name {
-    font-size: 1rem;
-  }
-}
-
-@media screen and (max-width: 630px) {
-  .circle {
-    width: 130px;
-    height: 130px;
-  }
-  .counter {
-    font-size: 1.5rem;
-  }
-
-  .circle-name {
-    font-size: 0.9rem;
-  }
-}
-
-@media screen and (max-width: 550px) {
-  .circle {
-    width: 100px;
-    height: 100px;
-  }
-  .counter {
-    font-size: 1.4rem;
-  }
-}
-
-@media screen and (max-width: 460px) {
-  .circle {
-    width: 80px;
-    height: 80px;
-  }
-  .counter {
-    font-size: 1.3rem;
+    width: 250px; /* Go back to large on mobile for a single-column stack */
+    height: 250px;
   }
 }

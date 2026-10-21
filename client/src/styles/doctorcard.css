@@ -1,189 +1,232 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+/* ===============================
+   PREMIUM DOCTOR CARD
+================================ */
+.premium-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-/* Ensure the body and html take full height */
-html, body {
-  height: 100%;
+/* Hover (only when NOT modal active) */
+.premium-card:hover:not(.modal-active) {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+/* When modal is active */
+.premium-card.modal-active {
+  z-index: 999999 !important;
+  transform: none !important;
+  pointer-events: none;
+}
+
+/* Disable button interaction while modal is active */
+.premium-card.modal-active .book-now-btn {
+  pointer-events: none;
+}
+
+/* ===============================
+   GLOBAL MODAL OVERLAY (REFERENCE)
+================================ */
+.global-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: modalFade 0.2s ease-in-out;
+}
+
+@keyframes modalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===============================
+   MODAL CONTAINER (REFERENCE)
+================================ */
+.prescription-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 95%;
+  max-width: 800px;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1),
+              0 10px 10px -5px rgba(0,0,0,0.04);
+  animation: modalPop 0.3s ease-out;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ===============================
+   MODAL HEADER + CLOSE BUTTON
+================================ */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 15px;
+}
+
+.modal-header h3 {
+  font-size: 1.5rem;
+  color: #1e293b;
   margin: 0;
 }
 
-/* Wrapper for content and footer */
-.wrapper {
+/* Updated Close Button (Reference Style) */
+.close-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Full viewport height */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s ease;
 }
 
-/* Content takes up remaining space */
-.content {
-  flex: 1;
+.close-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* ===============================
+   CARD HEADER
+================================ */
+.card-header {
+  position: relative;
+  height: 200px;
+}
+
+.doctor-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.experience-tag {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #0f172a;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ===============================
+   CARD CONTENT
+================================ */
+.card-content {
   padding: 20px;
 }
 
-/* Footer */
-footer {
-  background-color: #f1f1f1;
-  text-align: center;
-  padding: 1rem;
-  width: 100%;
-}
-
-/* Doctor Card Container */
-.doctor-card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 0;
-}
-
-/* Doctor Card */
-.doctor-card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  max-width: 350px;
-  border: 1px solid #00abe4;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-  font-family: 'Roboto', sans-serif;
-}
-
-.doctor-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.doctor-card-img {
-  flex-shrink: 0;
-  margin-right: 1.5rem;
-}
-
-.doctor-card-img img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 2px solid #00abe4;
-}
-
-.doctor-card-info {
-  flex-grow: 1;
-  text-align: left;
-}
-
-.doctor-card-name {
-  font-size: 1.1rem;
+.specialization-chip {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
-.doctor-card-specialization {
-  font-size: 0.9rem;
-  color: #1e375a;
-  margin-bottom: 0.5rem;
+.doctor-fullname {
+  font-size: 1.2rem;
+  color: #1e293b;
+  margin-bottom: 15px;
 }
 
-.doctor-card-experience {
-  font-size: 0.9rem;
-  color: #1e375a;
-  margin-bottom: 0.5rem;
-}
-
-.doctor-card-rating {
+/* ===============================
+   STATS SECTION
+================================ */
+.doctor-stats {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  color: #1e375a;
+  justify-content: space-between;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 15px;
+  margin-bottom: 20px;
 }
 
-.doctor-card-rating span {
+.stat-item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
 
-.doctor-card-btn {
-  background-color: #00abe4;
+.stat-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* ===============================
+   BOOK BUTTON (PRIMARY ACTION)
+================================ */
+.book-now-btn {
+  width: 100%;
+  padding: 14px;
+  background: #0f172a;
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 0.7rem 1.2rem;
-  font-size: 0.9rem;
+  border-radius: 12px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.doctor-card-btn:hover {
-  background-color: #0077ff;
+.book-now-btn:hover {
+  background: #020617;
+  transform: translateY(-1px);
 }
 
-/* Title Spacing */
-.our-doctors-title {
-  margin-bottom: 2rem; /* Adjust this value to match spacing with Appointment section */
+/* ===============================
+   MODAL FOOTER ACTIONS (REFERENCE)
+================================ */
+.modal-footer {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 1024px) {
-  .doctor-card {
-    max-width: calc(50% - 1rem); /* Adjust to 2 columns */
-  }
-}
-
-@media (max-width: 768px) {
-  .doctor-card {
-    max-width: 100%; /* Single column on smaller screens */
-    flex-direction: column; /* Stack image and info vertically */
-    align-items: flex-start; /* Align content to the start */
+/* ===============================
+   RESPONSIVE SAFETY
+================================ */
+@media (max-width: 640px) {
+  .doctor-stats {
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .doctor-card-img {
-    margin-right: 0;
-    margin-bottom: 1rem; /* Add spacing between image and info */
-  }
-
-  .doctor-card-img img {
-    width: 60px; /* Adjust image size for smaller screens */
-    height: 60px;
-  }
-}
-
-@media (max-width: 576px) {
-  .doctor-card-container {
-    padding: 1rem 0; /* Adjust padding for small screens */
-  }
-
-  .doctor-card {
-    padding: 1rem; /* Adjust padding inside cards for small screens */
-  }
-}
-
-@media (max-width: 400px) {
-  .doctor-card {
-    font-size: 0.8rem; /* Smaller font size for very small devices */
-    padding: 0.7rem; /* Adjust padding for very small screens */
-  }
-
-  .doctor-card-img img {
-    width: 50px; /* Smaller image size for very small screens */
-    height: 50px;
-  }
-
-  .doctor-card-name {
-    font-size: 1rem; /* Smaller font size for very small devices */
-  }
-
-  .doctor-card-specialization,
-  .doctor-card-experience,
-  .doctor-card-rating {
-    font-size: 0.8rem; /* Smaller font size for very small devices */
-  }
-
-  .doctor-card-btn {
-    font-size: 0.8rem; /* Smaller button font size for very small devices */
-    padding: 0.5rem 1rem; /* Adjust button padding */
+  .prescription-modal {
+    padding: 20px;
   }
 }

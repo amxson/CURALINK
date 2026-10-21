@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import toast from "react-hot-toast"; 
+import toast from "react-hot-toast";
 import "../styles/contact.css";
 
 interface FormDetails {

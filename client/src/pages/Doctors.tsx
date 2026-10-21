@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import DoctorCard from "../components/DoctorCard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import "../styles/doctors.css";
 import fetchData from "../helper/apiCall";
 import Loading from "../components/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../redux/reducers/rootSlice";
 import Empty from "../components/Empty";
-import { RootState } from "../redux/store"; // Update import path here
 
 interface User {
   _id: string;
-  pic?: string;
-  firstname: string;
-  lastname: string;
-  mobile: string;
+  pic?: string | null;
+  firstname?: string | null;
+  lastname?: string | null;
+  mobile?: string | null;
 }
 
 interface Doctor {
@@ -23,53 +20,117 @@ interface Doctor {
   specialization: string;
   experience: number;
   fees: number;
-  userId: User;
+  userId?: User | null;
 }
+
+const specializations = [
+  "All", "General Practitioner", "Neurologist", "Cardiologist", "ENT Specialist",
+  "Dermatologist", "Pediatrician", "Orthopedic Surgeon", "Gynecologist",
+  "Psychiatrist", "Ophthalmologist", "Urologist", "Oncologist",
+  "Endocrinologist", "Gastroenterologist", "Pulmonologist", "Rheumatologist",
+  "Nephrologist", "Hematologist", "Anesthesiologist", "Emergency Medicine",
+  "Pathologist", "Radiologist", "Plastic Surgeon", "Infectious Disease Specialist",
+  "Physiotherapist"
+];
 
 const Doctors: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const dispatch = useDispatch();
-  const { loading } = useSelector((state: RootState) => state.root);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSpec, setSelectedSpec] = useState("All");
 
-  const fetchAllDocs = async () => {
-    dispatch(setLoading(true));
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const lastDoctorRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
+
+  const fetchDoctors = useCallback(async () => {
+    setLoading(true);
     try {
-      const data = await fetchData<Doctor[]>(`api/doctor/getalldoctors`);
-      setDoctors(data);
-    } catch (error) {
-      console.error("Error fetching doctors:", error);
+      const res = await fetchData<{ doctors: Doctor[]; totalPages: number }>(
+        `api/doctor/getalldoctors?page=${page}&limit=20`
+      );
+      if (res?.doctors?.length) {
+        setDoctors((prev) => [...prev, ...res.doctors]);
+      }
+      if (page >= (res?.totalPages || 0)) setHasMore(false);
+    } catch (err) {
+      console.error(err);
     } finally {
-      dispatch(setLoading(false));
+      setLoading(false);
     }
-  };
+  }, [page]);
 
-  useEffect(() => {
-    fetchAllDocs();
-  }, [dispatch]);
+  useEffect(() => { fetchDoctors(); }, [fetchDoctors]);
+
+  const filteredDoctors = useMemo(() => {
+    return doctors.filter((doc) => {
+      const fullName = `${doc.userId?.firstname} ${doc.userId?.lastname}`.toLowerCase();
+      const matchesSearch = fullName.includes(searchTerm.toLowerCase());
+      const matchesSpec = selectedSpec === "All" || doc.specialization === selectedSpec;
+      return matchesSearch && matchesSpec;
+    });
+  }, [doctors, searchTerm, selectedSpec]);
 
   return (
-    <>
+    <div className="wrapper">
       <Navbar />
-      {loading && <Loading />}
-      {!loading && (
-        <section className="container doctors">
-          <h2 className="page-heading">Our Doctors</h2>
-          {doctors.length > 0 ? (
-            <div className="doctors-card-container">
-              {doctors.map((doctor) => (
-                <DoctorCard
-                  ele={doctor}
-                  key={doctor._id}
-                />
-              ))}
-            </div>
+      <div className="content doctora-page">
+        <header className="doctors-hero-section">
+          <h1 className="page-heading">Find Your Specialist</h1>
+          <p className="hero-subtitle">Book with 500+ top-rated Ethiopian medical professionals</p>
+
+          <div className="filter-container">
+            <input
+              type="text"
+              placeholder="Search doctor name..."
+              className="search-bar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select
+              className="spec-select"
+              value={selectedSpec}
+              onChange={(e) => setSelectedSpec(e.target.value)}
+            >
+              {specializations.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+        </header>
+
+        <section className="doctor-card-container">
+          {filteredDoctors.length === 0 && !loading ? (
+            <Empty message="No doctors found matching your criteria." />
           ) : (
-            <Empty message="No doctors found." />
+            filteredDoctors.map((doctor, idx) => (
+              <div
+                ref={filteredDoctors.length === idx + 1 ? lastDoctorRef : null}
+                key={doctor._id}
+                className="card-wrapper"
+              >
+                <DoctorCard ele={doctor} />
+              </div>
+            ))
           )}
         </section>
-      )}
+
+        {loading && <div className="loading-center"><Loading /></div>}
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

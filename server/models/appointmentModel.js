@@ -24,6 +24,13 @@ const schema = mongoose.Schema(
       type: String,
       default: "Pending",
     },
+    // --- NEW OPD FIELDS ---
+    opdType: {
+      type: String, // e.g., General, Specialist
+    },
+    roomNumber: {
+      type: String,
+    },
   },
   {
     timestamps: true,

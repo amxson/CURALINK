@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
 import { FiMenu } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
-import { jwtDecode } from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 // Define types for user data decoded from JWT
 interface User {
@@ -38,12 +38,8 @@ const Navbar: React.FC = () => {
   );
 
   const logoutFunc = () => {
-    const defaultUserInfo: UserInfo = {
-      id: "",
-      email: "",
-      // Provide default values for other required fields
-    };
-    dispatch(setUserInfo(defaultUserInfo));
+    // Update to include _id and role
+    dispatch(setUserInfo({ _id: "", email: "", role: "" }));
     localStorage.removeItem("token");
     navigate("/login");
   };

@@ -1,82 +1,98 @@
+@import url(app.css);
+
 footer {
-  background-color: #cfe1f3; /* A slightly darker shade than the light blue */
-  padding: 1rem 0; /* Reduced height */
+  background-color: #1a202c; /* Deep slate for a solid professional finish */
+  padding: 2rem 0;
+  margin-top: auto;
+  border-top: 4px solid #0a74da; /* Accent line matching your brand blue */
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 9rem; /* Padding for spacing */
-}
-
-.footer-info {
-  color: var(--light-text-color);
-  display: flex;
-  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .footer-info p {
   margin: 0;
+  font-weight: 500;
+  color: #a0aec0; /* Soft grey text */
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
-.footer-info p {
-  font-weight: 600;
-  color: var(--bold-text-color);
-}
-
-.social {
-  display: flex;
-  align-items: center;
+.footer-info span {
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .social ul {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem;
   padding: 0;
   list-style: none;
   margin: 0;
 }
 
+/* Base style for all social icons */
 .social li {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px; /* Matching the "Squircle" style of your dashboard */
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.05); /* Subtle ghost background */
 }
 
 .social a {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: blue; /* Blue color for icons */
+  color: #ffffff; /* Icons are white initially */
+  text-decoration: none;
+  font-size: 1.2rem;
 }
 
-.social a:hover {
-  font-weight: bold; /* Bold effect on hover */
+/* Hover States - Sophisticated Glows */
+.social li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.social svg {
-  font-size: 1.3rem;
-}
-
-.facebook {
+.social li.facebook:hover {
   background-color: #3b5998;
 }
 
-.instagram {
+.social li.youtube:hover {
+  background-color: #ff0000;
+}
+
+.social li.instagram:hover {
   background: linear-gradient(
-    180deg,
-    rgba(64, 93, 230, 1) 0%,
-    rgba(131, 58, 180, 1) 25%,
-    rgba(225, 48, 108, 1) 50%,
-    rgba(245, 96, 64, 1) 75%,
-    rgba(252, 175, 69, 1) 100%
+    45deg,
+    #405de6,
+    #833ab4,
+    #e1306c,
+    #f56040,
+    #fcaf45
   );
 }
 
-.youtube {
-  background-color: #ff0000;
+/* Responsive Design */
+@media screen and (max-width: 770px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  footer {
+    padding: 2.5rem 0;
+  }
 }

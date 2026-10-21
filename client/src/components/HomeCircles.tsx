@@ -23,7 +23,7 @@ const HomeCircles: React.FC = () => {
     }
   };
 
-  const fetchDoctorCount = async () => {
+const fetchDoctorCount = async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get("/api/doctor/getalldoctors", {
@@ -32,8 +32,11 @@ const HomeCircles: React.FC = () => {
         },
       });
 
-      const doctors = response.data;
-      setDoctorCount(doctors.length);
+      // FIX: Your backend returns an object: { total: 10, doctors: [...], ... }
+      // We should use the 'total' field provided by the backend.
+      const totalDoctors = response.data.total || 0;
+
+      setDoctorCount(totalDoctors);
     } catch (error) {
       console.error("Failed to fetch doctors", error);
     }
@@ -45,71 +48,49 @@ const HomeCircles: React.FC = () => {
   }, []);
 
   return (
-    <section className="circles-section">
-      <h2 className="circles-title">Our Key Metrics</h2>
-      <div className="circles">
-        <div className="circle">
-          <CountUp
-            start={0}
-            end={totalCount}
-            delay={0}
-            enableScrollSpy={true}
-            scrollSpyDelay={500}
-          >
-            {({ countUpRef }) => (
-              <div className="counter">
-                <span ref={countUpRef} />+
-              </div>
-            )}
-          </CountUp>
-          <span className="circle-name">
-            Total
-            <br />
-            Appointments
-          </span>
-        </div>
-        <div className="circle">
-          <CountUp
-            start={0}
-            end={completedCount}
-            delay={0}
-            enableScrollSpy={true}
-            scrollSpyDelay={500}
-          >
-            {({ countUpRef }) => (
-              <div className="counter">
-                <span ref={countUpRef} />+
-              </div>
-            )}
-          </CountUp>
-          <span className="circle-name">
-            Satisfied
-            <br />
-            Patients
-          </span>
-        </div>
-        <div className="circle">
-          <CountUp
-            start={0}
-            end={doctorCount}
-            delay={0}
-            enableScrollSpy={true}
-            scrollSpyDelay={500}
-          >
-            {({ countUpRef }) => (
-              <div className="counter">
-                <span ref={countUpRef} />+
-              </div>
-            )}
-          </CountUp>
-          <span className="circle-name">
-            Verified
-            <br />
-            Doctors
-          </span>
-        </div>
-      </div>
-    </section>
+// ... inside your HomeCircles.tsx return
+<section className="circles-section">
+  <h2 className="circles-title">Impact by the Numbers</h2>
+  <p className="circles-subtitle">Real-time statistics from our growing healthcare network</p>
+
+  <div className="circles">
+    {/* Card 1 */}
+    <div className="circle">
+       <CountUp end={totalCount} enableScrollSpy={true}>
+          {({ countUpRef }) => (
+            <div className="counter">
+              <span ref={countUpRef} />+
+            </div>
+          )}
+       </CountUp>
+       <span className="circle-name">Appointments Done</span>
+    </div>
+
+    {/* Card 2 */}
+    <div className="circle">
+       <CountUp end={completedCount} enableScrollSpy={true}>
+          {({ countUpRef }) => (
+            <div className="counter">
+              <span ref={countUpRef} />+
+            </div>
+          )}
+       </CountUp>
+       <span className="circle-name">Happy Patients</span>
+    </div>
+
+    {/* Card 3 */}
+    <div className="circle">
+       <CountUp end={doctorCount} enableScrollSpy={true}>
+          {({ countUpRef }) => (
+            <div className="counter">
+              <span ref={countUpRef} />+
+            </div>
+          )}
+       </CountUp>
+       <span className="circle-name">Specialist Doctors</span>
+    </div>
+  </div>
+</section>
   );
 };
 

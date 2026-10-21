@@ -1,45 +1,59 @@
-/* Loading Container */
-.loading {
+/* FULL PAGE OVERLAY */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+
+  z-index: 99999;
+}
+
+/* Loader */
+.loader {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 90vh;
+  gap: 0.8rem;
 }
 
-/* Bouncing Dots Loader */
-.loader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 6rem; /* Adjust size as needed */
-}
-
-.loader div {
-  width: 1rem; /* Dot size */
-  height: 1rem;
+/* Dots */
+.loader span {
+  width: 0.9rem;
+  height: 0.9rem;
   border-radius: 50%;
-  background-color: #002f61; /* Dot color */
-  animation: bounce 1.5s infinite ease-in-out;
+  background-color: #002f61;
+  animation: bounceFade 1.4s infinite cubic-bezier(0.6, 0.05, 0.1, 0.9);
 }
 
-.loader div:nth-child(1) {
-  animation-delay: 0s;
-}
+/* Stagger */
+.loader span:nth-child(1) { animation-delay: 0s; }
+.loader span:nth-child(2) { animation-delay: 0.15s; }
+.loader span:nth-child(3) { animation-delay: 0.3s; }
 
-.loader div:nth-child(2) {
-  animation-delay: 0.3s;
-}
-
-.loader div:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
+/* Animation */
+@keyframes bounceFade {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.4;
   }
-  50% {
-    transform: translateY(-1.5rem); /* Adjust bounce height as needed */
+  40% {
+    transform: translateY(-1.2rem) scale(1.15);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0) scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .loader span {
+    animation: none;
   }
 }

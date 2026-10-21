@@ -1,0 +1,115 @@
+/* --- RESET & LAYOUT ENGINE --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.lab-layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Takes full height of screen */
+  background-color: #f1f5f9; /* Soft neutral gray */
+  font-family: 'Inter', sans-serif;
+}
+
+.lab-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* --- THE HEADER --- */
+.lab-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 15px 0;
+  flex-shrink: 0;
+}
+
+.lab-header .lab-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lab-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 1.1rem;
+}
+
+.lab-brand svg {
+  color: #3b82f6;
+}
+
+/* --- LOGOUT BUTTON --- */
+.logout-simple-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.logout-simple-btn:hover {
+  background: #f1f5f9;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* --- MAIN CONTENT (The Fix) --- */
+.lab-main-area {
+  flex: 1; /* This pushes the footer down by taking up all available space */
+  padding: 40px 0;
+}
+
+.worklist-section {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 25px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 15px;
+}
+
+.section-title h2 {
+  font-size: 1.25rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.live-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #10b981;
+  background: #d1fae5;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .lab-main-area { padding: 20px 0; }
+  .worklist-section { padding: 15px; }
+}

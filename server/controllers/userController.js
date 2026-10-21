@@ -52,10 +52,10 @@ const login = async (req, res) => {
     }
 
     // Check if the role matches
-    if (user.role !== role) {
-      console.error("Role mismatch"); // Debugging line
-      return res.status(400).send("Role mismatch");
-    }
+    // if (user.role !== role) {
+    //   console.error("Role mismatch"); // Debugging line
+    //   return res.status(400).send("Role mismatch");
+    // }
 
     // Check if the password is correct
     const isMatch = await bcrypt.compare(password, user.password);
@@ -89,6 +89,8 @@ const register = async (req, res) => {
       console.error("Registration error: Missing fields"); // Debugging line
       return res.status(400).send("All fields are required");
     }
+
+    if (!["Patient", "Doctor"].includes(role)) return res.status(403).send("Use staff management to create staff accounts");
 
     // Check for existing email
     const emailPresent = await User.findOne({ email });
@@ -128,7 +130,8 @@ const register = async (req, res) => {
 const updateprofile = async (req, res) => {
   try {
     const { password, ...updateFields } = req.body;
-    let updateData = { ...updateFields };
+    const allowed = ["firstname", "lastname", "age", "gender", "mobile", "address", "pic"];
+    let updateData = Object.fromEntries(Object.entries(updateFields).filter(([key]) => allowed.includes(key)));
 
 
     if (password) {
@@ -157,7 +160,8 @@ const updateprofile = async (req, res) => {
 // Change user password
 const changepassword = async (req, res) => {
   try {
-    const { userId, currentPassword, newPassword, confirmNewPassword } = req.body;
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
+    const userId = req.user.userId;
 
     if (newPassword !== confirmNewPassword) {
       console.error("Passwords do not match"); // Debugging line
@@ -277,6 +281,52 @@ const resetpassword = async (req, res) => {
   }
 };
 
+// Add this to the bottom of userController.js
+const addStaff = async (req, res) => {
+  try {
+    const { firstname, lastname, email, password, role, specialization, experience, fees } = req.body;
+
+    // 1. Check if email already exists
+    const emailPresent = await User.findOne({ email });
+    if (emailPresent) {
+      return res.status(409).send("Email already exists");
+    }
+
+    // 2. Hash password
+    const hashedPass = await bcrypt.hash(password, 10);
+
+    // 3. Create the User
+    const newUser = new User({
+      firstname,
+      lastname,
+      email,
+      password: hashedPass,
+      role, // This will be "Doctor" or "Technician"
+      isDoctor: role === "Doctor"
+    });
+
+    const savedUser = await newUser.save();
+
+    // 4. If the role is Doctor, create the Doctor Profile automatically
+    if (role === "Doctor") {
+      const newDoctorProfile = new Doctor({
+        userId: savedUser._id,
+        specialization: specialization || "General Practitioner",
+        experience: experience || 1,
+        fees: fees || 500,
+        isDoctor: true
+      });
+      await newDoctorProfile.save();
+    }
+
+    return res.status(201).send(`${role} added successfully`);
+  } catch (error) {
+    console.error("Error adding staff:", error);
+    res.status(500).send("Unable to add staff member");
+  }
+};
+
+// Update your module.exports at the very bottom to include addStaff
 module.exports = {
   getuser,
   getallusers,
@@ -287,4 +337,5 @@ module.exports = {
   changepassword,
   forgotpassword,
   resetpassword,
+  addStaff, // Add this line
 };

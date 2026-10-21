@@ -1,144 +1,135 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../styles/chatbot.css"; // Import the CSS for styling
+import ReactMarkdown from "react-markdown";
 import axios from "axios";
+import "../styles/chatbot.css";
 
-interface BasicResponses {
-  [key: string]: string;
+interface Message {
+  text: string;
+  user: boolean;
+  doctors?: any[];
 }
 
-const basicResponses: BasicResponses = {
-  "what are your hours?": "Our office hours are Monday to Friday, 9 AM to 5 PM.",
-  "what is your address?": "We are located at 123 Health Street, Wellness City.",
-  "how can I contact support?": "You can contact support via email at support@health.com or call us at (123) 456-7890.",
-  // Add more predefined questions and answers here
-};
-
 const Chatbot: React.FC = () => {
-  const [messages, setMessages] = useState<{ text: string; user: boolean }[]>([]);
-  const [input, setInput] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Booking state
+  const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
+  const [bookingDate, setBookingDate] = useState("");
+  const [bookingTime, setBookingTime] = useState("");
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  useEffect(scrollToBottom, [messages, isLoading]);
 
   useEffect(() => {
-    if (isModalOpen) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: "Hello! How can I assist you today?", user: false },
-      ]);
+    if (isModalOpen && messages.length === 0) {
+      setMessages([{ text: "Hello! Describe your symptoms, and I'll help you find the right doctor.", user: false }]);
     }
   }, [isModalOpen]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
-    if (input.trim() === "") return;
-
-    const userMessage = input;
-    setMessages(prevMessages => [...prevMessages, { text: userMessage, user: true }]);
+    const userMsg = input.trim();
     setInput("");
-    setIsLoading(true); // Start loading animation
+    setMessages(prev => [...prev, { text: userMsg, user: true }]);
+    setIsLoading(true);
 
     try {
-      // Step 1: Retrieve the initial bot response
-      const initialResponse = await axios.post("/api/chat", { prompt: userMessage, clearContext: false });
-      const botResponse = initialResponse.data.message;
-
-      // Step 2: Format the bot response in HTML
-      const formatPrompt = `
-      Convert the following text into HTML. For each sentence, generate a corresponding HTML snippet using inline CSS for styling. Ensure that:
-      - The HTML is wrapped in a "<div>" tag.
-      - Do not include any "DOCTYPE", "html", "head", or "body" tags.
-      - Do not use <p> tags.
-      - Avoid including any disclaimers or statements about limitations in providing medical advice.
-      - Apply inline CSS styling directly in the HTML tags.
-      - Provide the HTML code directly without any disclaimers or additional text.
-      - Style it based on what the content should look like based on the content generated.
-      - If the response mentions symptoms, recommend a list of specialists based on those symptoms. Use "<ul>" and "<li>" tags for the list, and make the specialist names bold.
-      - Ensure the response is precise and short. 
-    
-      If a list of symptoms or a symptom is mentioned, the output should include a recommendation list with specialists formatted as follows:
-      - Specialists should be listed in "<ul>" with "<li>" tags.
-      - Specialist names should be bolded using the "<strong>" tag.
-    
-      Bot Response:
-      ${botResponse}
-    `;
-    
-      const htmlResponse = await axios.post("/api/chat", { prompt: formatPrompt, clearContext: false });
-      const formattedHtml = htmlResponse.data.message;
-
-      setMessages(prevMessages => [...prevMessages, { text: formattedHtml, user: false }]);
-    } catch (error) {
-      console.error("Error processing chatbot response:", error);
-      setMessages(prevMessages => [...prevMessages, { text: "<div style='font-size: 16px; font-family: sans-serif;'>There was an error processing your request. Please try again later.</div>", user: false }]);
+      const { data } = await axios.post("/api/chat", { prompt: userMsg }, { withCredentials: true });
+      setMessages(prev => [...prev, { text: data.message, user: false, doctors: data.doctors }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { text: "⚠️ Error connecting to server.", user: false }]);
     } finally {
-      setIsLoading(false); // Stop loading animation
+      setIsLoading(false);
     }
   };
 
-  const handleClearContext = async () => {
+  const confirmBooking = async () => {
+    if (!bookingDate || !bookingTime) return alert("Please select date and time");
+    const token = localStorage.getItem("token");
+
     try {
-      await axios.post("/api/chat/clear-context");
-      setMessages([])
-      setMessages((prevMessages) => [
-        { text: "Hello! How can I assist you today?", user: false },
-      ]);
-    } catch (error) {
-      console.error("Error clearing chatbot context:", error);
+      await axios.post("/api/appointment/opd/create", {
+        doctorId: selectedDoctor.userId._id,
+        doctorname: selectedDoctor.name,
+        date: bookingDate,
+        time: bookingTime,
+        opdType: selectedDoctor.specialization
+      }, { headers: { Authorization: `Bearer ${token}` } });
+
+      setMessages(prev => [...prev, { text: `✅ Appointment booked with **${selectedDoctor.name}** for ${bookingDate} at ${bookingTime}.`, user: false }]);
+      setSelectedDoctor(null);
+    } catch (err) {
+      alert("Booking failed. Please try again.");
     }
   };
 
   return (
     <>
-      <button className="chatbot-button" onClick={() => setIsModalOpen(true)}>
-        💬
-      </button>
+      <button className="chatbot-toggle" onClick={() => setIsModalOpen(!isModalOpen)}>💬</button>
 
-      <div className={`chatbot ${isModalOpen ? "open" : ""}`}>
+      <div className={`chatbot-container ${isModalOpen ? "active" : ""}`}>
         <div className="chatbot-header">
-          <button
-            className="close-button"
-            onClick={() => setIsModalOpen(false)}
-          >
-            &times;
-          </button>
-          <h2 style={{ color: "#fff", margin: 0 }}>Medical-chatbot</h2>
-          <button className="clear-context-button" onClick={handleClearContext}>
-            Clear Context
-          </button>
+          <h3 className="chatbot-title">CuraLink Assistant</h3>
+          <button className="close_btn" onClick={() => setIsModalOpen(false)}>&times;</button>
         </div>
 
-        <div className="messages">
-          {messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.user ? "user" : "bot"}`}>
-              <div dangerouslySetInnerHTML={{ __html: msg.text }} />
+        <div className="chatbot-messages">
+          {messages.map((msg, i) => (
+            <div key={i} className="msg-box">
+              <div className={`msg-bubble ${msg.user ? "user" : "bot"}`}>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              </div>
+              {!msg.user && msg.doctors && msg.doctors.length > 0 && (
+                <div className="doctor-list-horizontal">
+                  {msg.doctors.map(doc => (
+                    <div className="doc-mini-card" key={doc._id}>
+                      <img src={doc.pic} alt="doc" />
+                      <h5>{doc.name}</h5>
+                      <button onClick={() => {setSelectedDoctor(doc); setBookingDate(""); setBookingTime("");}}>Book</button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
-          {isLoading && (
-            <div className="loading-animation bot">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-            </div>
-          )}
+          {isLoading && <div className="typing">AI is thinking...</div>}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={handleSubmit} className="input-form">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            disabled={isLoading} // Disable input while loading
-          />
-          <button type="submit" disabled={isLoading}>Send</button>
+
+        {selectedDoctor && (
+          <div className="booking-overlay">
+            <div className="overlay-content">
+              <h4>Book {selectedDoctor.name}</h4>
+              <p>Select Date:</p>
+              <div className="chip-grid">
+                {selectedDoctor.availableDates.map((d:any) => (
+                  <button key={d} className={bookingDate === d ? "active":""} onClick={()=>setBookingDate(d)}>{d}</button>
+                ))}
+              </div>
+              <p>Select Time:</p>
+              <div className="chip-grid">
+                {selectedDoctor.availableTimes.map((t:any) => (
+                  <button key={t} className={bookingTime === t ? "active":""} onClick={()=>setBookingTime(t)}>{t}</button>
+                ))}
+              </div>
+              <div className="overlay-btns">
+                <button className="confirm-btn" onClick={confirmBooking}>Confirm</button>
+                <button className="cancel-btn" onClick={() => setSelectedDoctor(null)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <form className="chatbot-input" onSubmit={handleSubmit}>
+          <input value={input} onChange={e => setInput(e.target.value)} placeholder="How are you feeling?" />
+          <button type="submit">Send</button>
         </form>
       </div>
     </>

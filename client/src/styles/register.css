@@ -67,7 +67,7 @@ input::-webkit-inner-spin-button {
 .submit-btn,
 .form-btn {
   padding: 0.8rem 1.5rem;
-  background-color: var(--dark-blue) !important; /* Consistent background color */
+  background-color: #2e384d !important; /* Consistent background color */
   color: white !important;
   border: none;
   border-radius: 8px !important; /* Slightly curved border */
