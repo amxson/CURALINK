@@ -63,7 +63,7 @@ const fetchDoctorCount = async () => {
             </div>
           )}
        </CountUp>
-       <span className="circle-name">Appointments Done</span>
+       <span className="circle-name">Total Appointments</span>
     </div>
 
     {/* Card 2 */}
@@ -75,7 +75,7 @@ const fetchDoctorCount = async () => {
             </div>
           )}
        </CountUp>
-       <span className="circle-name">Happy Patients</span>
+       <span className="circle-name">Completed Visits</span>
     </div>
 
     {/* Card 3 */}
@@ -87,7 +87,7 @@ const fetchDoctorCount = async () => {
             </div>
           )}
        </CountUp>
-       <span className="circle-name">Specialist Doctors</span>
+       <span className="circle-name">Approved Doctors</span>
     </div>
   </div>
 </section>

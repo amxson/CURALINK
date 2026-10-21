@@ -58,7 +58,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section className="register-section flex-center" id="contact">
+    <section className="contact-section flex-center" id="contact">
       <div className="contact-container flex-center contact">
         <h2 className="form-heading">Contact Us</h2>
         <form onSubmit={handleSubmit} className="register-form">
@@ -66,6 +66,8 @@ const Contact: React.FC = () => {
             type="text"
             name="name"
             className="form-input"
+            aria-label="Your name"
+            required
             placeholder="Enter your name"
             value={formDetails.name}
             onChange={inputChange}
@@ -74,6 +76,8 @@ const Contact: React.FC = () => {
             type="email"
             name="email"
             className="form-input"
+            aria-label="Your email"
+            required
             placeholder="Enter your email"
             value={formDetails.email}
             onChange={inputChange}
@@ -81,6 +85,8 @@ const Contact: React.FC = () => {
           <textarea
             name="message"
             className="form-input"
+            aria-label="Your message"
+            required
             placeholder="Enter your message"
             value={formDetails.message}
             onChange={inputChange}

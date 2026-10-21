@@ -9,6 +9,8 @@ footer {
 
 .footer-content {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;

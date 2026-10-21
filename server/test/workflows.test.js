@@ -60,3 +60,16 @@ test('CuraLink patient, staff, appointment, lab and prescription workflows', {ti
   } finally {await new Promise(resolve=>server.close(resolve)); await mongoose.disconnect(); await db.stop();}
 });
 
+
+test('demo data contains linked records and distinct hashed login credentials', async () => {
+ const {buildData}=require('../scripts/seed-demo');const data=await buildData();
+ assert.equal(data.doctors.length,20);assert.equal(data.users.filter(u=>u.role==='Patient').length,4);
+ assert.equal(new Set(data.doctors.map(d=>d.specialization)).size,20);
+ assert.equal(new Set(data.accounts.map(a=>a.email)).size,26);assert.equal(new Set(data.accounts.map(a=>a.password)).size,26);
+ const ids=new Set(data.users.map(u=>String(u._id)));
+ for(const [model,key]of [[require('../models/userModel'),'users'],[require('../models/doctorModel'),'doctors'],[require('../models/appointmentModel'),'appointments'],[require('../models/labModel'),'labs'],[require('../models/prescriptionModel'),'prescriptions']])for(const record of data[key])assert.equal(new model(record).validateSync(),undefined);
+ for(const d of data.doctors)assert.ok(ids.has(String(d.userId)));
+ for(const a of data.appointments){assert.ok(ids.has(String(a.userId)));assert.ok(ids.has(String(a.doctorId)));}
+ assert.equal(data.appointments.filter(a=>a.status==='Completed').length,28);
+ assert.ok(await require('bcrypt').compare(data.accounts[0].password,data.users[0].password));
+});

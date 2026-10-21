@@ -1,7 +1,9 @@
 /* Register Page Styles */
 .register-section {
   width: 100%;
-  height: 100vh;
+  min-height: calc(100svh - 72px);
+  height: auto;
+  padding: 3rem 1.5rem;
 }
 
 .register-container {
