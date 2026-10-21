@@ -142,5 +142,4 @@ p {
   }
 }
 
-body { overflow-x: clip; }
 @media (max-width: 600px) { .register-container { width: min(100%, 28rem); } .button-container { flex-wrap: wrap; } }

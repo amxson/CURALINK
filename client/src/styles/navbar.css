@@ -205,3 +205,5 @@ nav {
     margin-bottom: 2px;
   }
 }
+
+.demo-badge { display: inline-block; margin-left: 0.6rem; padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid #cbd5e1; color: #475569; font-size: 0.7rem; font-weight: 500; vertical-align: middle; }

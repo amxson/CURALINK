@@ -1,0 +1,4 @@
+.git
+client/build
+**/node_modules
+**/.env*

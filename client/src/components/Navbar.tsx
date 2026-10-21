@@ -96,7 +96,7 @@ useEffect(() => {
     <header>
       <nav className={iconActive ? "nav-active" : ""}>
         <h2 className="nav-logo">
-          <NavLink to={"/"}>CuraLink</NavLink>
+          <NavLink to={"/"}>CuraLink</NavLink><span className="demo-badge">Demo</span>
         </h2>
 
         <ul className="nav-links" onClick={() => setIconActive(false)}>

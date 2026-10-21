@@ -13,13 +13,15 @@ const Prescription = require('../models/prescriptionModel');
 const Notification = require('../models/notificationModel');
 const Contact = require('../models/contact');
 const names = ['Abel','Beth','Caleb','Dalia','Elias','Fara','Gabriel','Hana','Isaac','Jada','Kaleb','Lena','Mika','Nora','Omar','Priya','Ruth','Samuel','Tara','Yonas','Amira','Daniel','Maya','Noah','Avery','Robin'];
+const surnames=['Mekonnen','Bekele','Girma','Tadesse','Kebede','Tesfaye','Alemu','Getachew','Mengistu','Yohannes','Abebe','Haile','Desta','Assefa','Worku','Solomon','Fikre','Tsegaye','Muluneh','Abate','Mulugeta','Sisay','Belay','Birhanu','Demo','Demo'];
 async function buildData() {
  const users=[],doctors=[],accounts=[];
  for(let i=0;i<26;i++){
   const role=i<20?'Doctor':i<24?'Patient':i===24?'Admin':'Technician'; const num=String(i<20?i+1:i-19).padStart(2,'0');
   const email=`${role.toLowerCase()}${num}@demo.curalink.example`;
   const password=`Cura-${role.slice(0,3)}${num}-${crypto.randomBytes(6).toString('base64url')}!`;
-  const user={_id:new mongoose.Types.ObjectId(),firstname:names[i],lastname:`Demo${num}`,email,password:await bcrypt.hash(password,10),role,age:i<20?30+i:24+i,gender:'',mobile:'',address:'Fictional demo account',status:i<20?'accepted':'active',createdAt:new Date(),updatedAt:new Date()};
+  const user={_id:new mongoose.Types.ObjectId(),firstname:names[i],lastname:surnames[i],email,password:await bcrypt.hash(password,10),role,age:i<20?30+i:24+i,gender:'',mobile:'',address:'Fictional demo account',status:i<20?'accepted':'active',createdAt:new Date(),updatedAt:new Date()};
+  const avatar=`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" rx="80" fill="${['#e0f2fe','#dcfce7','#ede9fe','#fef3c7'][i%4]}"/><text x="80" y="98" text-anchor="middle" font-family="sans-serif" font-size="54" fill="#1e375a">${user.firstname[0]}${user.lastname[0]}</text></svg>`;user.pic='data:image/svg+xml;base64,'+Buffer.from(avatar).toString('base64');
   users.push(user);accounts.push({name:`${user.firstname} ${user.lastname}`,role,specialty:specialties[i]||'',email,password});
   if(role==='Doctor')doctors.push({_id:new mongoose.Types.ObjectId(),userId:user._id,specialization:specialties[i],experience:3+(i%18),fees:300+(i%8)*100,isDoctor:true,createdAt:new Date(),updatedAt:new Date()});
  }
