@@ -54,6 +54,11 @@ app.use(session({
 /* ===========================
     ROUTES
 =========================== */
+app.use("/api", async (req, res, next) => {
+  if (req.path.startsWith("/chat")) return next();
+  try { await require("./db/conn")(); next(); }
+  catch { res.status(503).json({ message: "CuraLink database is temporarily unavailable. Please try again shortly." }); }
+});
 app.use("/api/user", userRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/appointment", appointRouter);
