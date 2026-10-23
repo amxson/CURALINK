@@ -8,6 +8,7 @@ require("./db/conn");
 const { GoogleGenAI } = require("@google/genai");
 
 const Doctor = require("./models/doctorModel");
+const matchSpecializations = require("./utils/matchSpecializations");
 const userRouter = require("./routes/userRoutes");
 const doctorRouter = require("./routes/doctorRoutes");
 const appointRouter = require("./routes/appointRoutes");
@@ -128,11 +129,7 @@ app.post("/api/chat", async (req, res) => {
 
     // 4. Regex Matching Engine
     const combinedText = (aiReply + " " + prompt).toLowerCase();
-    const matchedSpecs = specializations.filter(spec => {
-      const rootWord = spec.split(' ')[0].toLowerCase();
-      const regex = new RegExp(rootWord, 'i');
-      return regex.test(combinedText);
-    });
+    const matchedSpecs = matchSpecializations(combinedText, specializations);
 
     // 5. FETCH DOCTORS - UPDATED FOR NOTIFICATIONS
     const allDoctors = await Doctor.find({
