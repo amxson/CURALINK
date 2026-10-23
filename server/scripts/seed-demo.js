@@ -22,6 +22,7 @@ async function buildData() {
   const password=`Cura-${role.slice(0,3)}${num}-${crypto.randomBytes(6).toString('base64url')}!`;
   const user={_id:new mongoose.Types.ObjectId(),firstname:names[i],lastname:surnames[i],email,password:await bcrypt.hash(password,10),role,age:i<20?30+i:24+i,gender:'',mobile:'',address:'Fictional demo account',status:i<20?'accepted':'active',createdAt:new Date(),updatedAt:new Date()};
   const avatar=`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" rx="80" fill="${['#e0f2fe','#dcfce7','#ede9fe','#fef3c7'][i%4]}"/><text x="80" y="98" text-anchor="middle" font-family="sans-serif" font-size="54" fill="#1e375a">${user.firstname[0]}${user.lastname[0]}</text></svg>`;user.pic='data:image/svg+xml;base64,'+Buffer.from(avatar).toString('base64');
+  if(role==='Doctor')user.pic=`https://randomuser.me/api/portraits/${i%2?'women':'men'}/${21+i}.jpg`;
   users.push(user);accounts.push({name:`${user.firstname} ${user.lastname}`,role,specialty:specialties[i]||'',email,password});
   if(role==='Doctor')doctors.push({_id:new mongoose.Types.ObjectId(),userId:user._id,specialization:specialties[i],experience:3+(i%18),fees:300+(i%8)*100,isDoctor:true,createdAt:new Date(),updatedAt:new Date()});
  }

@@ -29,6 +29,8 @@
 }
 
 .lab-header .lab-container {
+  flex-wrap: wrap;
+  gap: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -83,7 +85,7 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.section-title {
+.lab-layout-container .section-title {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -92,7 +94,7 @@
   padding-bottom: 15px;
 }
 
-.section-title h2 {
+.lab-layout-container .section-title h2 {
   font-size: 1.25rem;
   color: #1e293b;
   font-weight: 700;

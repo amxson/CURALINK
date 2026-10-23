@@ -18,7 +18,7 @@
   flex-direction: column;
   gap: 1.5rem;
   flex: 1.2; /* Content gets a bit more space */
-  z-index: 2;
+  z-index: 0;
 }
 
 .hero-title {

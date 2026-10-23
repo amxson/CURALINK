@@ -639,6 +639,12 @@
 
 /* Mobile Adjustments */
 @media (max-width: 900px) {
+  .catalog-controls { grid-template-columns: minmax(0, 1fr); padding: 16px; gap: 12px; }
+  .catalog-controls > * { min-width: 0; width: 100%; }
+  .tab-switcher button { flex: 1; }
+  .catalog-row > * { min-width: 0; }
+  .patient-meta { overflow-wrap: anywhere; }
+  .action-btns { flex-wrap: wrap; }
   .catalog-row {
     grid-template-columns: 1fr;
     gap: 10px;

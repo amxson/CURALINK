@@ -113,7 +113,7 @@ function ChangePassword() {
       ) : (
         <section className="register-section flex-center">
           <div className="profile-container flex-center">
-            <h2 className="form-heading">Profile</h2>
+            <h2 className="form-heading">Change password</h2>
             <img src={file} alt="profile" className="profile-pic" />
             <form onSubmit={formSubmit} className="register-form">
               <div className="form-same-row">

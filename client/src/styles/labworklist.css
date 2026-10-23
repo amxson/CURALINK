@@ -4,7 +4,7 @@
 
 .lab-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 25px;
   margin-top: 20px;
 }
@@ -26,6 +26,8 @@
 }
 
 .lab-card-header {
+  flex-wrap: wrap;
+  gap: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,6 +59,7 @@
 }
 
 .patient-section-header {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -94,6 +97,7 @@
 }
 
 .test-title {
+  overflow-wrap: anywhere;
   font-weight: 700;
   color: #1a202c;
   margin-bottom: 8px;

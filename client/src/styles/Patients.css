@@ -31,7 +31,7 @@
    ========================================================================== */
 .stats-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 1.5rem;
 }
 
@@ -316,3 +316,5 @@
 .info-item svg {
   color: #4e73df;
 }
+
+@media (max-width: 768px) { .patients-page .filter-controls { flex-direction: column; align-items: stretch; padding: 12px; } .patients-page .search-wrapper, .patients-page .filter-wrapper { min-width: 0; width: 100%; } .patients-page .filter-wrapper select { min-width: 0; width: 100%; } }

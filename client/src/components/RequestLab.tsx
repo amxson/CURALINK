@@ -1,4 +1,5 @@
-import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import AppDialog from "./AppDialog";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
@@ -17,11 +18,6 @@ const RequestLab: React.FC<RequestLabProps> = ({ setModalOpen, patientId, patien
     description: "",
   });
 
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = "unset"; };
-  }, []);
 
   const inputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -57,9 +53,9 @@ const RequestLab: React.FC<RequestLabProps> = ({ setModalOpen, patientId, patien
   };
 
   return (
-    <div className="modal" onClick={() => setModalOpen(false)}>
+    <AppDialog label="Order a lab test" onClose={() => setModalOpen(false)}>
       <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={() => setModalOpen(false)}>
+        <button aria-label="Close dialog" type="button" className="close-btn" onClick={() => setModalOpen(false)}>
           <IoClose size={20} />
         </button>
 
@@ -131,7 +127,7 @@ const RequestLab: React.FC<RequestLabProps> = ({ setModalOpen, patientId, patien
           </button>
         </form>
       </div>
-    </div>
+    </AppDialog>
   );
 };
 

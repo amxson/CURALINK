@@ -50,6 +50,8 @@ const Sidebar: React.FC = () => {
             <li key={index}>
               <NavLink
                 to={item.path}
+                aria-label={item.name}
+                title={item.name}
                 className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
               >
                 <span className="icon-wrapper">{item.icon}</span>
@@ -60,7 +62,7 @@ const Sidebar: React.FC = () => {
         </ul>
 
         <div className="sidebar-footer">
-          <button className="logout-btn" onClick={logoutFunc}>
+          <button className="logout-btn" aria-label="Sign Out" title="Sign Out" onClick={logoutFunc}>
             <div className="icon-wrapper">
               <MdLogout />
             </div>

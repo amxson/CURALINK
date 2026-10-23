@@ -93,7 +93,7 @@ useEffect(() => {
   };
 
   return (
-    <header>
+    <header className="site-header">
       <nav className={iconActive ? "nav-active" : ""}>
         <h2 className="nav-logo">
           <NavLink to={"/"}>CuraLink</NavLink>
@@ -150,7 +150,7 @@ useEffect(() => {
               <BsChevronDown className="dropdown-icon" />
             </div>
             {dropdownOpen && (
-              <ul className="dropdown-menu">
+              <ul className="dropdown-menu show">
                 <li><NavLink to="/profile">Profile</NavLink></li>
                 <li><NavLink to="/ChangePassword">Password</NavLink></li>
                 <li onClick={logoutFunc} style={{ cursor: "pointer", color: "red" }}>Logout</li>

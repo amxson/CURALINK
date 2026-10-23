@@ -22,7 +22,7 @@ const LabDashboard: React.FC = () => {
         <div className="lab-container">
           <div className="lab-brand">
             <FiDatabase />
-            <span>LAB_SYSTEM_ADMIN</span>
+            <span>CuraLink Laboratory</span>
           </div>
           <button className="logout-simple-btn" onClick={handleLogout}>
             <FiLogOut /> Logout

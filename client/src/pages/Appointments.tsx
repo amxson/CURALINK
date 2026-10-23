@@ -51,6 +51,9 @@ const Appointments: React.FC = () => {
   const { loading, opdAppointments } = useSelector((state: RootState) => state.root);
   const token = localStorage.getItem("token") || "";
 
+  const role = useMemo(() => { try { return jwtDecode<{role: string}>(token).role; } catch { return ""; } }, [token]);
+  const canManage = ["Doctor", "Admin"].includes(role);
+
   const userId = useMemo(() => {
     if (!token) return "";
     try {
@@ -70,18 +73,18 @@ const refreshData = useCallback(async () => {
     // OR 2. Use a type assertion if fetchData isn't generic
     // const reg = (await fetchData(`/api/appointment/getallappointments?search=${userId}`)) as Appointment[];
 
-    const opd = await axios.get(`/api/appointment/opd/${userId}`, {
+    const opd = await axios.get(`/api/appointment/opd${role === "Doctor" ? `/${userId}` : ""}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    setAppointments(reg);
+    setAppointments(reg.filter(app => !app.opdType));
     dispatch(setOpdAppointments(opd.data));
   } catch (error) {
     toast.error("Sync failed");
   } finally {
     dispatch(setLoading(false));
   }
-}, [dispatch, userId, token]);
+}, [dispatch, userId, token, role]);
 
   useEffect(() => { refreshData(); }, [refreshData]);
 
@@ -92,7 +95,7 @@ const refreshData = useCallback(async () => {
     try {
       const url = activeTab === "regular" ? "/api/appointment/status" : "/api/appointment/opd/status";
       const payload = activeTab === "regular" ? { appointid, status: newStatus } : { appointmentId: appointid, status: newStatus };
-      await axios.put(url, payload, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.request({ method: activeTab === "opd" ? "patch" : "put", url, data: payload, headers: { Authorization: `Bearer ${token}` } });
       toast.success(`Marked as ${newStatus}`);
       refreshData();
     } catch (error) { toast.error("Update failed"); }
@@ -100,7 +103,7 @@ const refreshData = useCallback(async () => {
 
   // --- THE MASTER FIX: NO HIDING, ONLY BRANCHING ---
   const processedList = useMemo(() => {
-    const rawList = (activeTab === "regular" ? appointments : (opdAppointments as Appointment[])) || [];
+    const rawList = ((activeTab === "regular" ? appointments : (opdAppointments as Appointment[])) || []).filter(app => app.userId && app.doctorId);
 
     // Sort by Date (Newest First)
     const sorted = [...rawList].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -116,12 +119,13 @@ const refreshData = useCallback(async () => {
 
   const filteredPatients = useMemo(() => {
     return processedList.filter((app) => {
-      const fullName = `${app.userId.firstname} ${app.userId.lastname}`.toLowerCase();
+      const person = canManage ? app.userId : app.doctorId;
+      const fullName = `${person.firstname} ${person.lastname}`.toLowerCase();
       const matchesSearch = fullName.includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === "All" || app.status.toLowerCase() === statusFilter.toLowerCase();
       return matchesSearch && matchesStatus;
     });
-  }, [processedList, searchTerm, statusFilter]);
+  }, [processedList, searchTerm, statusFilter, canManage]);
 
   const paginatedPatients = filteredPatients.slice((currentPage - 1) * PerPage, currentPage * PerPage);
 
@@ -130,7 +134,7 @@ const refreshData = useCallback(async () => {
       <Navbar />
       <section className="container catalog-section">
         <div className="catalog-header">
-          <h2 className="page-heading">Live Patient Stream</h2>
+          <h2 className="page-heading">{canManage ? "Patient appointments" : "Your appointments"}</h2>
           <div className="stats-pill-modern">
             <FiActivity /> <span>{filteredPatients.length} Total Bookings</span>
           </div>
@@ -143,13 +147,14 @@ const refreshData = useCallback(async () => {
           </div>
           <div className="search-bar-modern">
             <FiSearch />
-            <input type="text" placeholder="Search patients..." onChange={(e) => setSearchTerm(e.target.value)} />
+            <input type="text" aria-label={canManage ? "Search patients" : "Search doctors"} placeholder={canManage ? "Search patients..." : "Search doctors..."} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
           <select className="status-dropdown" onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="All">All Events</option>
             <option value="Pending">Pending</option>
             <option value="Accepted">Accepted</option>
             <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
           </select>
         </div>
 
@@ -166,9 +171,9 @@ const refreshData = useCallback(async () => {
                   </div>
 
                   <div className="col-patient">
-                    <img src={app.userId.pic} alt="avatar" className="catalog-avatar" />
+                    <img src={(canManage ? app.userId : app.doctorId).pic} alt="" className="catalog-avatar" />
                     <div className="patient-meta">
-                      <span className="p-name">{app.userId.firstname} {app.userId.lastname}</span>
+                      <span className="p-name">{!canManage && "Dr. "}{(canManage ? app.userId : app.doctorId).firstname} {(canManage ? app.userId : app.doctorId).lastname}</span>
                       <span className="p-id">{app.isHistory ? "Previous Visit" : "Primary Session"}</span>
                     </div>
                   </div>
@@ -183,13 +188,13 @@ const refreshData = useCallback(async () => {
 
                   <div className="col-actions">
                     <div className="action-btns">
-                      {app.status === "Pending" && (
+                      {canManage && app.status === "Pending" && (
                         <>
                           <button className="icon-btn check" onClick={() => handleStatusUpdate(app._id, "Accepted")}><FiCheck /></button>
-                          <button className="icon-btn cross" onClick={() => handleStatusUpdate(app._id, "Discarded")}><FiX /></button>
+                          <button className="icon-btn cross" onClick={() => handleStatusUpdate(app._id, "Cancelled")}><FiX /></button>
                         </>
                       )}
-                      {app.status === "Accepted" && (
+                      {canManage && app.status === "Accepted" && (
                         <>
                           <button className="btn-action-lab" onClick={() => { setSelectedPatient(app.userId); setLabModalOpen(true); }}><FiActivity /> Lab</button>
                           <button className="btn-action-done" onClick={() => handleStatusUpdate(app._id, "Completed")}>Done</button>
@@ -197,7 +202,7 @@ const refreshData = useCallback(async () => {
                       )}
                       {app.status === "Completed" && (
                         <>
-                          <button className="btn-action-prescription" onClick={() => { setSelectedPatient(app.userId); setSelectedAppId(app._id); setPrescModalOpen(true); }}><FiFileText /> Rx</button>
+                          {canManage && <button className="btn-action-prescription" onClick={() => { setSelectedPatient(app.userId); setSelectedAppId(app._id); setPrescModalOpen(true); }}><FiFileText /> Rx</button>}
                           <button className="btn-outline-small" onClick={() => { setSelectedDoctor(app.doctorId); setModalOpen(true); }}>Follow-up</button>
                         </>
                       )}

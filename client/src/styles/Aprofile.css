@@ -1,11 +1,13 @@
 .profile-grid {
   display: grid;
-  grid-template-columns: 350px 1fr;
+  grid-template-columns: minmax(0, 350px) minmax(0, 1fr);
   gap: 2rem;
   align-items: start;
 }
 
 .profile-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
   background: white;
   border-radius: 15px;
   padding: 2.5rem;
@@ -101,7 +103,7 @@
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
@@ -121,5 +123,8 @@
 .update-btn:hover { background: #2e59d9; }
 
 @media (max-width: 900px) {
-  .profile-grid { grid-template-columns: 1fr; }
+  .profile-grid { grid-template-columns: minmax(0, 1fr); }
+  .profile-card { padding: 20px; }
+  .profile-grid .form-row { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .profile-grid .input-group, .profile-grid input, .profile-grid textarea, .profile-grid select { min-width: 0; max-width: 100%; }
 }

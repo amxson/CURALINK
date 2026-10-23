@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import AppDialog from "./AppDialog";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import "../styles/bookappointment.css";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -10,6 +11,7 @@ interface BookAppointmentProps {
 }
 
 const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) => {
+  const [submitting, setSubmitting] = useState(false);
   const [formDetails, setFormDetails] = useState({
     date: "",
     time: "",
@@ -17,12 +19,6 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) 
     roomNumber: "",
   });
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
 
   const inputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -31,6 +27,8 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) 
 
   const bookAppointment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       await toast.promise(
         axios.post(
@@ -56,18 +54,18 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) 
       setModalOpen(false);
     } catch (error) {
       console.error("Booking Error:", error);
-    }
+    } finally { setSubmitting(false); }
   };
 
   return (
-    <div className="modal-overlay" onClick={() => setModalOpen(false)}>
+    <AppDialog label="Schedule an appointment" onClose={() => setModalOpen(false)}>
       <div className="modal-content appointment-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <h3>Schedule Follow-up</h3>
+            <h3>Schedule an appointment</h3>
             <p className="modal-subtitle">Dr. {ele?.userId?.firstname} {ele?.userId?.lastname}</p>
           </div>
-          <button className="close-btn" onClick={() => setModalOpen(false)}>
+          <button aria-label="Close dialog" type="button" className="close-btn" onClick={() => setModalOpen(false)}>
             <FiX size={20} />
           </button>
         </div>
@@ -79,6 +77,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) 
               <input
                 type="date"
                 name="date"
+                min={new Date().toLocaleDateString("en-CA")}
                 className="form-input"
                 value={formDetails.date}
                 onChange={inputChange}
@@ -127,13 +126,13 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ setModalOpen, ele }) 
           </div>
 
           <div className="modal-footer">
-            <button type="submit" className="btn-confirm-booking">
-              Confirm & Schedule
+            <button type="submit" className="btn-confirm-booking" disabled={submitting}>
+              {submitting ? "Scheduling…" : "Confirm & Schedule"}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </AppDialog>
   );
 };
 

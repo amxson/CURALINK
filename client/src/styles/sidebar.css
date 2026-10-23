@@ -1,5 +1,6 @@
 .sidebar-section {
-  width: 280px;
+  width: 250px;
+  flex-shrink: 0;
   height: 100vh;
   background: #ffffff;
   border-right: 1px solid #e3e6f0;
@@ -8,7 +9,7 @@
   position: sticky;
   top: 0;
   transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: 100;
 }
 
 /* Brand Section */
@@ -66,7 +67,7 @@
   margin: 0;
 }
 
-.nav-link {
+.sidebar-menu .nav-link {
   display: flex;
   align-items: center;
   padding: 0.85rem 1rem;
@@ -96,7 +97,8 @@
   color: #4e73df;
 }
 
-.nav-link.active::after {
+.sidebar-menu .nav-link.active::after {
+  top: calc(50% - 10px);
   content: '';
   position: absolute;
   right: 0;
@@ -149,3 +151,6 @@
     justify-content: center;
   }
 }
+
+.sidebar-menu .nav-link { position: relative; }
+@media (max-width: 768px) { .sidebar-section { width: 64px; } .sidebar-brand { padding: 20px 8px; } .sidebar-container { padding: 0 6px; align-items: stretch; } .sidebar-menu .nav-link, .logout-btn { justify-content: center; padding: 12px; } .brand-icon { flex-shrink: 0; } }

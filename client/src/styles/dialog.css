@@ -1,0 +1,10 @@
+.app-dialog-backdrop { position: fixed; inset: 0; z-index: 2000; background: #0f172a99; display: flex; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; overscroll-behavior: contain; }
+.app-dialog-panel { width: min(100%, 720px); min-width: 0; max-height: calc(100dvh - 48px); outline: none; }
+.app-dialog-panel > .modal-content, .app-dialog-panel > .modal__content, .app-dialog-panel > .modal-container { width: 100%; max-width: none; height: auto; max-height: calc(100dvh - 48px); overflow-y: auto; margin: 0; padding: 28px; border-radius: 18px; background: white; position: relative; box-sizing: border-box; }
+.app-dialog-panel .modal-header { display: flex; align-items: flex-start; gap: 16px; }
+.app-dialog-panel .modal-header h3 { overflow-wrap: anywhere; font-size: 1.25rem; }
+.app-dialog-panel .close-btn { flex-shrink: 0; }
+.app-dialog-panel .modal-footer, .app-dialog-panel .modal-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.app-dialog-panel input, .app-dialog-panel select, .app-dialog-panel textarea { min-width: 0; max-width: 100%; }
+.app-dialog-panel .med-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 600px) { .app-dialog-backdrop { padding: 12px; } .app-dialog-panel { max-height: calc(100dvh - 24px); } .app-dialog-panel > .modal-content, .app-dialog-panel > .modal__content, .app-dialog-panel > .modal-container { padding: 20px; max-height: calc(100dvh - 24px); } .app-dialog-panel .form-row, .app-dialog-panel .med-row { grid-template-columns: minmax(0, 1fr); } .app-dialog-panel .modal-footer > button, .app-dialog-panel .modal-actions > button { flex: 1; } }

@@ -1,3 +1,4 @@
+import AppDialog from "./AppDialog";
 // src/components/BookOPDAppointment.tsx
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
@@ -61,10 +62,10 @@ const BookOPDAppointment: React.FC<BookOPDAppointmentProps> = ({ setModalOpen, d
   };
 
   return (
-    <div className="modal flex-center">
+    <AppDialog label="Book an OPD appointment" onClose={() => setModalOpen(false)}>
       <div className="modal__content">
         <h2 className="page-heading">Book OPD Appointment</h2>
-        <button type="button" className="close-btn" onClick={() => setModalOpen(false)}>
+        <button type="button" aria-label="Close dialog" className="close-btn" onClick={() => setModalOpen(false)}>
           <IoClose />
         </button>
 
@@ -80,7 +81,7 @@ const BookOPDAppointment: React.FC<BookOPDAppointmentProps> = ({ setModalOpen, d
           <button type="submit" className="btn form-btn">Book OPD</button>
         </form>
       </div>
-    </div>
+    </AppDialog>
   );
 };
 

@@ -1,3 +1,4 @@
+import AppDialog from "./AppDialog";
 import React, { useState } from "react";
 import { FiX, FiPlus, FiTrash2, FiSend } from "react-icons/fi";
 import axios from "axios";
@@ -50,11 +51,11 @@ const handleSubmit = async (e: React.FormEvent) => {
 };
 
   return (
-    <div className="modal-overlay">
+    <AppDialog label="Issue a prescription" onClose={() => setModalOpen(false)}>
       <div className="modal-content prescription-modal">
         <div className="modal-header">
           <h3>Issue Prescription: {patientName}</h3>
-          <button className="close-btn" onClick={() => setModalOpen(false)}><FiX /></button>
+          <button aria-label="Close dialog" type="button" className="close-btn" onClick={() => setModalOpen(false)}><FiX /></button>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -83,7 +84,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
         </form>
       </div>
-    </div>
+    </AppDialog>
   );
 };
 

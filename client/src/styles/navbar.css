@@ -1,4 +1,4 @@
-header {
+.site-header {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -7,13 +7,13 @@ header {
   top: 0;
   left: 0;
   background-color: var(--light-blue);
-  z-index: 2;
+  z-index: 200;
   box-shadow: 0 0 20px 0 rgba(144, 174, 205, 0.339);
   padding: 0 2rem; /* Added padding */
   height: 72px; /* Ensures consistent height */
 }
 
-nav {
+.site-header nav {
   display: flex;
   align-items: center; /* Aligns items horizontally */
   justify-content: space-between;
@@ -201,8 +201,11 @@ nav {
 /* Apply profile-header padding and margin for smaller screens where hamburger shows */
 @media (max-width: 950px) {
   .profile-header {
-    padding: 56px;
-    margin-bottom: 2px;
+    padding: 0;
+    margin-right: 44px;
   }
 }
 
+
+.site-header .profile-menu .dropdown-menu { display: block; }
+.site-header .profile-header { min-height: 44px; }

@@ -107,7 +107,10 @@ p {
 }
 
 .nothing {
-  font-size: 3rem;
+  font-size: clamp(1.15rem, 3vw, 1.75rem);
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
   color: rgba(30, 55, 90, 0.3);
   height: 100%;
 }
@@ -143,3 +146,16 @@ p {
 }
 
 @media (max-width: 600px) { .register-container { width: min(100%, 28rem); } .button-container { flex-wrap: wrap; } }
+
+.layout-container { align-items: flex-start; gap: 0; }
+.layout-container > :not(.sidebar-section) { flex: 1; min-width: 0; }
+@media (max-width: 600px) {
+  .layout-container > :not(.sidebar-section) { padding: 20px 12px; }
+  .profile-container { width: min(100%, 42rem); }
+  .form-same-row { flex-wrap: wrap; }
+}
+
+.staff-form-section { width: 100%; min-width: 0; }
+.staff-form-card { width: 100%; min-width: 0; }
+.staff-form input, .staff-form select { min-width: 0; }
+@media (max-width: 600px) { .staff-form-card { padding: 20px !important; } .staff-form > div, .staff-form > div > div { grid-template-columns: minmax(0, 1fr) !important; } }

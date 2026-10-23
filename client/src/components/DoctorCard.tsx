@@ -1,6 +1,5 @@
 import "../styles/doctorcard.css";
 import React, { useState } from "react";
-import ReactDOM from "react-dom"; // Import ReactDOM for Portal
 import BookAppointment from "../components/BookAppointment";
 import { toast } from "react-hot-toast";
 
@@ -24,7 +23,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ ele }) => {
   return (
     <div className="premium-card">
       <div className="card-header">
-        <img src={pic} alt={firstname} className="doctor-avatar" />
+        <img src={pic} alt={`Dr. ${firstname} ${lastname}`} className="doctor-avatar" loading="lazy" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"%3E%3Crect width="160" height="160" fill="%23e0f2fe"/%3E%3Ccircle cx="80" cy="55" r="25" fill="%2364748b"/%3E%3Cpath d="M30 150a50 55 0 0 1 100 0" fill="%2364748b"/%3E%3C/svg%3E'; }} />
         <div className="experience-tag">{ele.experience} Years Exp.</div>
       </div>
 
@@ -48,18 +47,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ ele }) => {
         </button>
       </div>
 
-      {/* RENDER MODAL OUTSIDE THE CARD HIERARCHY */}
-      {modalOpen &&
-        ReactDOM.createPortal(
-          <div className="global-modal-overlay">
-             <BookAppointment
-               setModalOpen={setModalOpen}
-               ele={ele}
-             />
-          </div>,
-          document.body // Teleports to the very end of <body>
-        )
-      }
+      {modalOpen && <BookAppointment setModalOpen={setModalOpen} ele={ele} />}
     </div>
   );
 };

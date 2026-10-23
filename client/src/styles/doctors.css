@@ -18,7 +18,7 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-.hero-title {
+.doctors-hero .hero-title {
   font-size: clamp(2rem, 5vw, 3rem); /* Dynamic font size */
   font-weight: 800;
   margin-bottom: 10px;
@@ -72,7 +72,7 @@
 .doctor-card-container {
   display: grid;
   /* DYNAMIC: Automatically switches columns based on width */
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 25px;
   padding: 40px 20px;
   max-width: 1400px;
@@ -99,7 +99,7 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-.page-heading {
+.doctors-hero-section .page-heading {
   font-size: 1.8rem; /* Scaled down for a sleeker look */
   font-weight: 700;
   margin-bottom: 5px;

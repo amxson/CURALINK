@@ -1,3 +1,4 @@
+import AppDialog from "./AppDialog";
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -20,6 +21,8 @@ const UploadResultModal: React.FC<Props> = ({ labId, onClose, onSuccess }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) { e.target.value = ""; return toast.error("Choose a file smaller than 5 MB."); }
+      if (!["image/png", "image/jpeg", "image/webp", "application/pdf"].includes(file.type)) { e.target.value = ""; return toast.error("Choose a PNG, JPG, WebP or PDF file."); }
       setFileName(file.name);
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -62,11 +65,11 @@ const handleSubmit = async (e: React.FormEvent) => {
   };
 
   return (
-    <div className="modal-overlay">
+    <AppDialog label="Submit lab results" onClose={onClose}>
       <div className="modal-container">
         <div className="modal-header">
           <h3>Submit Lab Results</h3>
-          <button className="close-btn" onClick={onClose}><FiX /></button>
+          <button aria-label="Close dialog" type="button" className="close-btn" onClick={onClose}><FiX /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="modal-form">
@@ -83,7 +86,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <input
               type="file"
               id="file-input"
-              accept="image/*,application/pdf"
+              accept="image/png,image/jpeg,image/webp,application/pdf"
               onChange={handleFileChange}
               hidden
             />
@@ -98,7 +101,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <>
                   <FiUploadCloud className="upload-icon" />
                   <span>Click to upload Lab Report</span>
-                  <p>PNG, JPG or PDF (Max 5MB)</p>
+                  <p>PNG, JPG, WebP or PDF (Max 5MB)</p>
                 </>
               )}
             </label>
@@ -112,7 +115,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
         </form>
       </div>
-    </div>
+    </AppDialog>
   );
 };
 

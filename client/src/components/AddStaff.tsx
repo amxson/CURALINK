@@ -46,11 +46,11 @@ const AddStaff: React.FC = () => {
 
   return (
     <section className="container staff-form-section">
-      <div className="form-container" style={{maxWidth: "700px", margin: "0 auto", padding: "2rem", background: "white", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)"}}>
+      <div className="staff-form-card" style={{maxWidth: "700px", margin: "0 auto", padding: "2rem", background: "white", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)"}}>
         <h2 className="page-heading" style={{textAlign: "center", marginBottom: "2rem"}}>Register New Staff</h2>
 
         <form onSubmit={handleSubmit} className="staff-form">
-          <div style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem"}}>
+          <div style={{display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "1rem", marginBottom: "1rem"}}>
             <input type="text" name="firstname" placeholder="First Name" value={formData.firstname} onChange={handleChange} required className="form-input" />
             <input type="text" name="lastname" placeholder="Last Name" value={formData.lastname} onChange={handleChange} required className="form-input" />
           </div>
@@ -73,7 +73,7 @@ const AddStaff: React.FC = () => {
               <select name="specialization" value={formData.specialization} onChange={handleChange} className="form-input" style={{width: "100%", marginBottom: "1rem"}}>
                 {specializations.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
-              <div style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem"}}>
+              <div style={{display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "1rem"}}>
                 <input type="number" name="experience" placeholder="Exp (Years)" value={formData.experience} onChange={handleChange} required className="form-input" />
                 <input type="number" name="fees" placeholder="Consultation Fee" value={formData.fees} onChange={handleChange} required className="form-input" />
               </div>
